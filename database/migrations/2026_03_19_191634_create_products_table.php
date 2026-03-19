@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Models\Brand;
+use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,10 +20,10 @@ return new class extends Migration
             $blueprint->string('code')->unique();
             $blueprint->string('title');
             $blueprint->string('slug')->unique();
-            $blueprint->foreignIdFor(\App\Models\Category::class)
+            $blueprint->foreignIdFor(Category::class)
                 ->constrained()
                 ->cascadeOnDelete();
-            $blueprint->foreignIdFor(\App\Models\Brand::class)
+            $blueprint->foreignIdFor(Brand::class)
                 ->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
