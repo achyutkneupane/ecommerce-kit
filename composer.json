@@ -2,11 +2,8 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "achyutn/ecommerce-kit",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": [
-        "laravel",
-        "framework"
-    ],
+    "description": "The starter kit for the Laravel framework with Filament v5 as Admin Panel and ecommerce support.",
+    "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
         "php": "^8.3",
@@ -19,7 +16,8 @@
         "filament/spatie-laravel-settings-plugin": "^5.4",
         "joaopaulolndev/filament-edit-profile": "^3.0",
         "laravel/framework": "^13.0",
-        "laravel/tinker": "^3.0"
+        "laravel/tinker": "^3.0",
+        "livewire/livewire": "^4.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^4.1",
@@ -65,7 +63,8 @@
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
