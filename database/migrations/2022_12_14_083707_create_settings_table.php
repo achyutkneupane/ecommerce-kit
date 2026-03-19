@@ -10,7 +10,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(config('settings.repositories.database.table', 'settings'), function (Blueprint $blueprint): void {
+        Schema::create('settings', function (Blueprint $blueprint): void {
             $blueprint->id();
 
             $blueprint->string('group');
