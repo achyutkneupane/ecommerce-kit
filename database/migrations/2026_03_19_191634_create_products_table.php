@@ -13,17 +13,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $blueprint): void {
+        Schema::create('products', function (Blueprint $blueprint): void {
             $blueprint->id();
-            $blueprint->string('name');
+            $blueprint->string('code')->unique();
+            $blueprint->string('title');
             $blueprint->string('slug')->unique();
-            $blueprint->foreignIdFor(\App\Models\Category::class, 'parent_id')
-                ->index()
+            $blueprint->foreignIdFor(\App\Models\Category::class)
+                ->constrained()
+                ->cascadeOnDelete();
+            $blueprint->foreignIdFor(\App\Models\Brand::class)
                 ->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
             $blueprint->json('specifications')->nullable();
+            $blueprint->softDeletes();
             $blueprint->timestamps();
+
+            $blueprint->index(['category_id', 'brand_id']);
         });
     }
 
@@ -32,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('products');
     }
 };

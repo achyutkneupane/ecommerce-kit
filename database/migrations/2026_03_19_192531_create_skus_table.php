@@ -13,16 +13,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $blueprint): void {
+        Schema::create('skus', function (Blueprint $blueprint): void {
             $blueprint->id();
-            $blueprint->string('name');
-            $blueprint->string('slug')->unique();
-            $blueprint->foreignIdFor(\App\Models\Category::class, 'parent_id')
+            $blueprint->foreignIdFor(\App\Models\Product::class)
                 ->index()
-                ->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
+            $blueprint->string('code')->unique();
+            $blueprint->unsignedInteger('price');
+            $blueprint->unsignedInteger('quantity')
+                ->default(0);
             $blueprint->json('specifications')->nullable();
+            $blueprint->softDeletes();
             $blueprint->timestamps();
         });
     }
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('skus');
     }
 };
