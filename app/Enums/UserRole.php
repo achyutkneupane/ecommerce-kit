@@ -18,7 +18,7 @@ enum UserRole: string implements HasColor, HasIcon, HasLabel
 
     case Admin = 'admin';
 
-    case Writer = 'writer';
+    case Manager = 'manager';
 
     case User = 'user';
 
@@ -27,7 +27,7 @@ enum UserRole: string implements HasColor, HasIcon, HasLabel
         return match ($this) {
             self::Developer => 'Developer',
             self::Admin => 'Admin',
-            self::Writer => 'Writer',
+            self::Manager => 'Manager',
             self::User => 'User',
         };
     }
@@ -37,7 +37,7 @@ enum UserRole: string implements HasColor, HasIcon, HasLabel
         return match ($this) {
             self::Developer => Color::Red,
             self::Admin => Color::Blue,
-            self::Writer => Color::Yellow,
+            self::Manager => Color::Yellow,
             self::User => Color::Green,
         };
     }
