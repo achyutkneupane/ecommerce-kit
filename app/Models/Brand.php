@@ -8,6 +8,7 @@ use AchyutN\LaravelHelpers\Models\MediaModel;
 use AchyutN\LaravelHelpers\Traits\HasTheSlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -28,4 +29,10 @@ class Brand extends MediaModel
     use HasTheSlug;
 
     protected string $sluggableColumn = 'name';
+
+    /** @return HasMany<Product> */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
 }

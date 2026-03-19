@@ -8,6 +8,8 @@ use AchyutN\LaravelHelpers\Models\MediaModel;
 use AchyutN\LaravelHelpers\Traits\HasTheSlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -31,4 +33,29 @@ class Product extends MediaModel
 {
     use HasTheSlug;
     use SoftDeletes;
+
+    protected function casts(): array
+    {
+        return [
+            'specifications' => 'array',
+        ];
+    }
+
+    /** @return BelongsTo<Category> */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    /** @return BelongsTo<Brand> */
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    /** @return HasMany<Sku> */
+    public function skus(): HasMany
+    {
+        return $this->hasMany(Sku::class);
+    }
 }

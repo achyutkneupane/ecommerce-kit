@@ -8,6 +8,8 @@ use AchyutN\LaravelHelpers\Models\MediaModel;
 use AchyutN\LaravelHelpers\Traits\HasTheSlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -34,5 +36,23 @@ class Category extends MediaModel
         return [
             'specifications' => 'array',
         ];
+    }
+
+    /** @return BelongsTo<Category> */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    /** @return HasMany<Category> */
+    public function children(): HasMany
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    /** @return HasMany<Product> */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
     }
 }

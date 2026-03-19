@@ -7,6 +7,7 @@ namespace App\Models;
 use AchyutN\LaravelHelpers\Models\MediaModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -28,6 +29,19 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Sku extends MediaModel
 {
     use SoftDeletes;
+
+    protected function casts(): array
+    {
+        return [
+            'specifications' => 'array',
+        ];
+    }
+
+    /** @return BelongsTo<Product> */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
 
     protected function price(): Attribute
     {
