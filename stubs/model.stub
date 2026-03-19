@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace {{ namespace }};
 
 {{ factoryImport }}
-use Illuminate\Database\Eloquent\Model;
 use AchyutN\LaravelHelpers\Models\MediaModel;
 
 class {{ class }} extends MediaModel
