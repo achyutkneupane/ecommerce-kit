@@ -61,9 +61,11 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
-final class StaticPage extends Model implements HasMarkup
+final class StaticPage extends MediaModel implements HasMarkup, Viewable
 {
+    use HasTheSlug;
     use InteractsWithSEO;
+    use InteractsWithViews;
     use PageSchema;
 
     public function getRouteKeyName(): string
