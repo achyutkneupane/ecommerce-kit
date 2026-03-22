@@ -22,6 +22,7 @@ class ProductForm
                     ->columnSpanFull()
                     ->required(),
                 Select::make('category_id')
+                    ->label('Category')
                     ->options(
                         fn () => Category::query()
                             ->select('id', 'name', 'parent_id')

@@ -6,6 +6,8 @@ namespace App\Models;
 
 use AchyutN\LaravelHelpers\Models\MediaModel;
 use AchyutN\LaravelHelpers\Traits\HasTheSlug;
+use App\Observers\ProductObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -57,6 +59,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
+#[ObservedBy(ProductObserver::class)]
 class Product extends MediaModel
 {
     use HasTheSlug;
