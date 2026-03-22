@@ -56,6 +56,8 @@ class ProductForm
                     ->relationship('brand', 'name'),
                 KeyValue::make('specifications')
                     ->helperText('Only the common specifications which won\'t be different in SKUs')
+                    ->keyLabel('Specification')
+                    ->valueLabel('Value')
                     ->hiddenJs(<<<'JS'
                         $get('category_id') === null
                     JS)
