@@ -27,7 +27,6 @@ class CategoryInfolist
                 ->components([
                     TextEntry::make('name')
                         ->url(fn (Category $record) => CategoryResource::getUrl('view', ['record' => $record]))
-                        ->openUrlInNewTab()
                         ->label('Name'),
                     TextEntry::make('parent.name')
                         ->label('Parent')
@@ -37,6 +36,7 @@ class CategoryInfolist
                     RepeatableEntry::make('children')
                         ->contained(false)
                         ->columnSpanFull()
+                        ->grid(3)
                         ->placeholder('No sub-categories found.')
                         ->label('Sub-categories')
                         ->schema(fn () => static::getSchema($depth + 1))
