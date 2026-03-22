@@ -33,7 +33,7 @@ class ProductInfolist
                             ->keyLabel('Specification')
                             ->valueLabel('Value')
                             ->placeholder('-')
-                            ->hidden(fn (?Product $record) => empty($record->specifications)),
+                            ->hidden(fn (?Product $product): bool => empty($product->specifications)),
                     ]),
             ]);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\Products\Resources\Skus;
 
 use App\Filament\Resources\Products\ProductResource;
@@ -29,12 +31,14 @@ class SkuResource extends Resource
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::OutlinedSquaresPlus;
 
     protected static ?string $parentResource = ProductResource::class;
+
     protected static ?string $label = 'SKU';
+
     protected static ?string $pluralLabel = 'SKUs';
 
     protected static ?string $recordTitleAttribute = 'code';
 
-    protected static SubNavigationPosition|null $subNavigationPosition = SubNavigationPosition::Top;
+    protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Schema $schema): Schema
     {

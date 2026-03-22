@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\Products\Resources\Skus\Schemas;
 
 use App\Models\Sku;
@@ -29,7 +31,7 @@ class SkuInfolist
                             ->keyLabel('Specification')
                             ->valueLabel('Value')
                             ->placeholder('-')
-                            ->hidden(fn (?Sku $record) => empty($record->specifications)),
+                            ->hidden(fn (?Sku $sku): bool => empty($sku->specifications)),
                     ]),
             ]);
     }

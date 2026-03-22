@@ -13,7 +13,7 @@ class SkuObserver
         $product = $sku->product()->first();
         $productCode = $product->code;
 
-        $lastSku = Sku::where('product_id', $sku->product_id)
+        $lastSku = Sku::query()->where('product_id', $sku->product_id)
             ->orderBy('id', 'desc')
             ->first();
 

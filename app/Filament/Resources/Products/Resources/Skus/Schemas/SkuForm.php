@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\Products\Resources\Skus\Schemas;
 
 use Filament\Forms\Components\KeyValue;
@@ -17,7 +19,7 @@ class SkuForm
                     ->columnSpanFull()
                     ->numeric(),
                 KeyValue::make('specifications')
-                    ->helperText('Don\'t repeat the common specifications which are already defined in the product')
+                    ->helperText("Don't repeat the common specifications which are already defined in the product")
                     ->keyLabel('Specification')
                     ->valueLabel('Value')
                     ->columnSpanFull(),

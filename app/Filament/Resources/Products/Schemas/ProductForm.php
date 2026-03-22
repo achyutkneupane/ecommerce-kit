@@ -32,11 +32,11 @@ class ProductForm
                             ->toArray()
                     )
                     ->afterStateUpdated(
-                        function (Set $set, ?int $state) {
+                        function (Set $set, ?int $state): void {
                             if ($state) {
-                                $specifications = Category::find($state)->specifications;
+                                $specifications = Category::query()->find($state)->specifications;
                                 $mapped = array_map(
-                                    fn ($specification) => [
+                                    fn ($specification): array => [
                                         'key' => $specification,
                                         'value' => '',
                                     ],
@@ -55,7 +55,7 @@ class ProductForm
                     ->preload()
                     ->relationship('brand', 'name'),
                 KeyValue::make('specifications')
-                    ->helperText('Only the common specifications which won\'t be different in SKUs')
+                    ->helperText("Only the common specifications which won't be different in SKUs")
                     ->keyLabel('Specification')
                     ->valueLabel('Value')
                     ->hiddenJs(<<<'JS'
