@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Categories\Schemas;
 
+use App\Models\Category;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -21,12 +24,18 @@ class CategoryForm
                 ->required()
                 ->lazy(),
 
+            TagsInput::make('specifications')
+                ->label('Specifications')
+                ->visible(fn () => $depth <= 1)
+                ->columnSpanFull(),
+
             Repeater::make('children')
                 ->label('Sub-categories')
                 ->relationship('children')
                 ->grid(3)
                 ->schema(fn (): array => static::getSchema($depth + 1))
-                ->hidden(fn (): bool => $depth >= 1)
+                ->hidden(fn (?Category $category): bool => $depth >= 1)
+                ->visible(fn (?Category $category) => $category?->parent_id === null)
                 ->collapsible()
                 ->collapsed(false),
         ];
