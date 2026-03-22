@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\Categories\Schemas;
 
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -24,10 +25,10 @@ class CategoryForm
                 ->label('Sub-categories')
                 ->relationship('children')
                 ->grid(3)
-                ->schema(fn () => static::getSchema($depth + 1))
-                ->hidden(fn () => $depth >= 1)
+                ->schema(fn (): array => static::getSchema($depth + 1))
+                ->hidden(fn (): bool => $depth >= 1)
                 ->collapsible()
-                ->collapsed(false)
+                ->collapsed(false),
         ];
     }
 
@@ -35,6 +36,6 @@ class CategoryForm
     {
         return $schema
             ->columns(1)
-            ->components(fn () => CategoryForm::getSchema());
+            ->components(fn (): array => CategoryForm::getSchema());
     }
 }
