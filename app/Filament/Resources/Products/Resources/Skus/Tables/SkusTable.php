@@ -25,7 +25,10 @@ class SkusTable
                     ->sortable(),
                 TextColumn::make('quantity')
                     ->numeric()
+                    ->badge()
                     ->sortable(),
+                TextColumn::make('specifications')
+                    ->badge(),
                 TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
