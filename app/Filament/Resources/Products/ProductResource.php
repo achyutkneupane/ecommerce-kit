@@ -7,8 +7,8 @@ namespace App\Filament\Resources\Products;
 use App\Filament\Resources\Products\Pages\CreateProduct;
 use App\Filament\Resources\Products\Pages\EditProduct;
 use App\Filament\Resources\Products\Pages\ListProducts;
+use App\Filament\Resources\Products\Pages\ManageProductSKUs;
 use App\Filament\Resources\Products\Pages\ViewProduct;
-//use App\Filament\Resources\Products\RelationManagers\SkusRelationManager;
 use App\Filament\Resources\Products\Schemas\ProductForm;
 use App\Filament\Resources\Products\Schemas\ProductInfolist;
 use App\Filament\Resources\Products\Tables\ProductsTable;
@@ -53,7 +53,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-//            'skus' => SkusRelationManager::class,
+            //
         ];
     }
 
@@ -64,6 +64,7 @@ class ProductResource extends Resource
             'create' => CreateProduct::route('/create'),
             'view' => ViewProduct::route('/{record}'),
             'edit' => EditProduct::route('/{record}/edit'),
+            'sku' => ManageProductSKUs::route('/{record}/sku'),
         ];
     }
 
@@ -80,6 +81,7 @@ class ProductResource extends Resource
         return $page->generateNavigationItems([
             ViewProduct::class,
             EditProduct::class,
+            ManageProductSKUs::class,
         ]);
     }
 }

@@ -24,11 +24,13 @@ class SkuResource extends Resource
 {
     protected static ?string $model = Sku::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::RectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::SquaresPlus;
 
-    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::OutlinedSquaresPlus;
 
     protected static ?string $parentResource = ProductResource::class;
+    protected static ?string $label = 'SKU';
+    protected static ?string $pluralLabel = 'SKUs';
 
     protected static ?string $recordTitleAttribute = 'code';
 
