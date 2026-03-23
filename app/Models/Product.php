@@ -9,6 +9,7 @@ use AchyutN\LaravelHelpers\Traits\HasTheSlug;
 use App\Observers\ProductObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,6 +34,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read Category $category
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
+ * @property-read mixed $quantity
  * @property-read Collection<int, Sku> $skus
  * @property-read int|null $skus_count
  *
@@ -79,6 +81,11 @@ class Product extends MediaModel
     public function skus(): HasMany
     {
         return $this->hasMany(Sku::class);
+    }
+
+    protected function quantity(): Attribute
+    {
+        return Attribute::get(fn ($value) => $this->skus()->sum('quantity'));
     }
 
     protected function casts(): array
