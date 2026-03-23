@@ -28,6 +28,9 @@ class ProductsTable
                     ->searchable(),
                 TextColumn::make('brand.name')
                     ->searchable(),
+                TextColumn::make('quantity')
+                    ->numeric()
+                    ->badge(),
             ])
             ->filters([
                 TrashedFilter::make(),
