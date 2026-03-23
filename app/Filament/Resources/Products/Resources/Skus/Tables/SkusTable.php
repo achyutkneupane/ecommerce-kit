@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Products\Resources\Skus\Tables;
 
+use App\Models\Sku;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -44,19 +49,23 @@ class SkusTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                TrashedFilter::make(),
-            ])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
-                ]),
+                Action::make('update-quantity')
+                    ->label('Update Quantity')
+                    ->icon(Heroicon::NumberedList)
+                    ->schema([
+                        TextInput::make('quantity')
+                            ->numeric()
+                            ->formatStateUsing(fn (Sku $record) => $record->quantity)
+                            ->required(),
+                    ])
+                    ->action(function ($record, $data) {
+                        $record->update([
+                            'quantity' => $data['quantity'],
+                        ]);
+                    }),
             ]);
     }
 }

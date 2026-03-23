@@ -27,9 +27,9 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::RectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::CursorArrowRipple;
 
-    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::OutlinedCursorArrowRipple;
 
     protected static ?string $recordTitleAttribute = 'title';
 
