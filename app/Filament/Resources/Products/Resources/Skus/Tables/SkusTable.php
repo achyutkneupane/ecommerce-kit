@@ -6,17 +6,11 @@ namespace App\Filament\Resources\Products\Resources\Skus\Tables;
 
 use App\Models\Sku;
 use Filament\Actions\Action;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class SkusTable
@@ -58,10 +52,10 @@ class SkusTable
                     ->schema([
                         TextInput::make('quantity')
                             ->numeric()
-                            ->formatStateUsing(fn (Sku $record) => $record->quantity)
+                            ->formatStateUsing(fn (Sku $sku) => $sku->quantity)
                             ->required(),
                     ])
-                    ->action(function ($record, $data) {
+                    ->action(function ($record, array $data): void {
                         $record->update([
                             'quantity' => $data['quantity'],
                         ]);

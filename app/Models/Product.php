@@ -34,7 +34,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read Category $category
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
- * @property-read mixed $quantity
+ * @property-read int $quantity
  * @property-read Collection<int, Sku> $skus
  * @property-read int|null $skus_count
  *
@@ -85,7 +85,7 @@ class Product extends MediaModel
 
     protected function quantity(): Attribute
     {
-        return Attribute::get(fn ($value) => $this->skus()->sum('quantity'));
+        return Attribute::get(fn ($value): int => $this->skus()->sum('quantity'));
     }
 
     protected function casts(): array
