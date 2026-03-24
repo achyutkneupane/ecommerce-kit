@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use AchyutN\LaravelHelpers\Models\MediaModel;
+use App\Casts\Currency;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -15,7 +16,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $id
  * @property int $order_id
  * @property int|null $payment_method_id
- * @property int $amount
+ * @property int|float $amount
  * @property string|null $transaction_id
  * @property array<array-key, mixed>|null $payload
  * @property Carbon|null $created_at
@@ -56,6 +57,7 @@ class Payment extends MediaModel
     protected function casts(): array
     {
         return [
+            'amount' => Currency::class,
             'payload' => 'array',
         ];
     }

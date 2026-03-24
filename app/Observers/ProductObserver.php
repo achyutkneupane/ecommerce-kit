@@ -15,7 +15,7 @@ class ProductObserver
         $prefix = $siteSettings->store_prefix ?? 'EK';
         $prefix .= 'P';
 
-        $lastProduct = Product::query()->withoutGlobalScopes()->withTrashed()->orderBy('id', 'desc')->first();
+        $lastProduct = Product::query()->withoutGlobalScopes()->orderBy('id', 'desc')->first();
 
         $lastProductCode = $lastProduct?->code;
         $lastProductNumber = $lastProductCode ? (int) str_replace($prefix, '', $lastProductCode) : 0;

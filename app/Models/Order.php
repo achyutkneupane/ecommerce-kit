@@ -17,7 +17,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
- * @property string $order_number
+ * @property string $code
  * @property int|null $user_id
  * @property string $full_name
  * @property string $email
@@ -46,6 +46,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Order newQuery()
  * @method static Builder<static>|Order query()
  * @method static Builder<static>|Order whereAddress($value)
+ * @method static Builder<static>|Order whereCode($value)
  * @method static Builder<static>|Order whereCreatedAt($value)
  * @method static Builder<static>|Order whereDeliveryCharge($value)
  * @method static Builder<static>|Order whereDeliveryInstructions($value)
@@ -55,7 +56,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Order whereGrossTotal($value)
  * @method static Builder<static>|Order whereId($value)
  * @method static Builder<static>|Order whereNetTotal($value)
- * @method static Builder<static>|Order whereOrderNumber($value)
  * @method static Builder<static>|Order wherePhone($value)
  * @method static Builder<static>|Order whereStatus($value)
  * @method static Builder<static>|Order whereTax($value)

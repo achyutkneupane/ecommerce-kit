@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $blueprint): void {
             $blueprint->id();
 
-            $blueprint->string('order_number')->unique();
+            $blueprint->string('code')->unique();
             $blueprint->foreignIdFor(User::class)
                 ->nullable()
                 ->index()
