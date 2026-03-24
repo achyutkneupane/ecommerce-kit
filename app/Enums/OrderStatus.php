@@ -11,7 +11,7 @@ use Illuminate\Contracts\Support\Htmlable;
 
 enum OrderStatus: string implements HasColor, HasLabel
 {
-    case INITIATED = 'initiated';
+    case INITIATED = 'initiated'; // default value in migration. Don't change the value
     case PAYMENT_RECEIVED = 'payment_received';
     case DISPATCHED = 'dispatched';
     case DELIVERED = 'delivered';

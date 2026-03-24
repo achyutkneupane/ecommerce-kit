@@ -20,7 +20,7 @@ enum UserRole: string implements HasColor, HasIcon, HasLabel
 
     case Manager = 'manager';
 
-    case User = 'user';
+    case User = 'user'; // default value in migration. Don't change the value
 
     public function getLabel(): ?string
     {
