@@ -18,7 +18,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * @property int $id
  * @property int $product_id
- * @property string $code
+ * @property string|null $code
  * @property int|float $price
  * @property int $quantity
  * @property array<array-key, mixed>|null $specifications

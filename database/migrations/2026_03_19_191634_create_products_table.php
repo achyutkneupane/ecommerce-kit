@@ -17,7 +17,9 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $blueprint): void {
             $blueprint->id();
-            $blueprint->string('code')->unique();
+            $blueprint->string('code')
+                ->nullable()
+                ->unique();
             $blueprint->string('title');
             $blueprint->string('slug')->unique();
             $blueprint->foreignIdFor(Category::class)
@@ -28,6 +30,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
             $blueprint->json('specifications')->nullable();
+            $blueprint->unsignedInteger('sku_sequence')->default(1);
             $blueprint->softDeletes();
             $blueprint->timestamps();
 

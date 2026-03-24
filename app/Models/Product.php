@@ -21,12 +21,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
- * @property string $code
+ * @property string|null $code
  * @property string $title
  * @property string $slug
  * @property int $category_id
  * @property int|null $brand_id
  * @property array<array-key, mixed>|null $specifications
+ * @property int $sku_sequence
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -49,6 +50,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Product whereCreatedAt($value)
  * @method static Builder<static>|Product whereDeletedAt($value)
  * @method static Builder<static>|Product whereId($value)
+ * @method static Builder<static>|Product whereSkuSequence($value)
  * @method static Builder<static>|Product whereSlug($value)
  * @method static Builder<static>|Product whereSpecifications($value)
  * @method static Builder<static>|Product whereTitle($value)

@@ -20,7 +20,9 @@ return new class extends Migration
                 ->index()
                 ->constrained()
                 ->cascadeOnDelete();
-            $blueprint->string('code')->unique();
+            $blueprint->string('code')
+                ->nullable()
+                ->unique();
             $blueprint->unsignedInteger('price');
             $blueprint->unsignedInteger('quantity')
                 ->default(0);

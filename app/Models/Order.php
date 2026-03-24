@@ -17,7 +17,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
- * @property string $code
+ * @property string|null $code
  * @property int|null $user_id
  * @property string $full_name
  * @property string $email
