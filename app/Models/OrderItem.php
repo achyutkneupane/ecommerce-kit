@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use AchyutN\LaravelHelpers\Models\MediaModel;
+use App\Casts\Currency;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
@@ -60,26 +60,12 @@ class OrderItem extends MediaModel
         return $this->belongsTo(Sku::class);
     }
 
-    protected function unitPrice(): Attribute
-    {
-        return Attribute::make(
-            get: fn (int $value): int|float => $value / 100,
-            set: fn (float|int $value): int => (int) ($value * 100),
-        );
-    }
-
-    protected function subtotal(): Attribute
-    {
-        return Attribute::make(
-            get: fn (int $value): int|float => $value / 100,
-            set: fn (float|int $value): int => (int) ($value * 100),
-        );
-    }
-
     protected function casts(): array
     {
         return [
             'properties' => 'array',
+            'unit_price' => Currency::class,
+            'subtotal' => Currency::class,
         ];
     }
 }

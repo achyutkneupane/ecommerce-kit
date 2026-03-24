@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use AchyutN\LaravelHelpers\Models\MediaModel;
+use App\Casts\Currency;
 use App\Observers\SkuObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
@@ -62,14 +62,7 @@ class Sku extends MediaModel
     {
         return [
             'specifications' => 'array',
+            'price' => Currency::class,
         ];
-    }
-
-    protected function price(): Attribute
-    {
-        return Attribute::make(
-            get: fn (int $value): int|float => $value / 100,
-            set: fn (float|int $value): int => (int) ($value * 100),
-        );
     }
 }

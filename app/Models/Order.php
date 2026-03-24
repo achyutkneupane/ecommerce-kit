@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 use AchyutN\LaravelHelpers\Models\MediaModel;
+use App\Casts\Currency;
 use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -90,50 +90,15 @@ class Order extends MediaModel
         return $this->hasMany(OrderLog::class);
     }
 
-    protected function grossTotal(): Attribute
-    {
-        return Attribute::make(
-            get: fn (int $value): int|float => $value / 100,
-            set: fn (float|int $value): int => (int) ($value * 100),
-        );
-    }
-
-    protected function discount(): Attribute
-    {
-        return Attribute::make(
-            get: fn (int $value): int|float => $value / 100,
-            set: fn (float|int $value): int => (int) ($value * 100),
-        );
-    }
-
-    protected function deliveryCharge(): Attribute
-    {
-        return Attribute::make(
-            get: fn (int $value): int|float => $value / 100,
-            set: fn (float|int $value): int => (int) ($value * 100),
-        );
-    }
-
-    protected function tax(): Attribute
-    {
-        return Attribute::make(
-            get: fn (int $value): int|float => $value / 100,
-            set: fn (float|int $value): int => (int) ($value * 100),
-        );
-    }
-
-    protected function netTotal(): Attribute
-    {
-        return Attribute::make(
-            get: fn (int $value): int|float => $value / 100,
-            set: fn (float|int $value): int => (int) ($value * 100),
-        );
-    }
-
     protected function casts(): array
     {
         return [
             'status' => OrderStatus::class,
+            'gross_total' => Currency::class,
+            'discount' => Currency::class,
+            'delivery_charge' => Currency::class,
+            'tax' => Currency::class,
+            'net_total' => Currency::class,
         ];
     }
 }
