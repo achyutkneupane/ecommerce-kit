@@ -17,7 +17,11 @@ return new class extends Migration
             $blueprint->id();
 
             $blueprint->string('order_number')->unique();
-            $blueprint->morphs('customer');
+            $blueprint->foreignIdFor(\App\Models\User::class)
+                ->nullable()
+                ->index()
+                ->constrained()
+                ->nullOnDelete();
             $blueprint->string('full_name');
             $blueprint->string('email');
             $blueprint->string('phone');
