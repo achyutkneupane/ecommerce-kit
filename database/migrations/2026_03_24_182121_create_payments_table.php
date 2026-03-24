@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Models\Order;
+use App\Models\PaymentMethod;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +17,10 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $blueprint): void {
             $blueprint->id();
-            $blueprint->foreignIdFor(\App\Models\Order::class)
+            $blueprint->foreignIdFor(Order::class)
                 ->constrained()
                 ->cascadeOnDelete();
-            $blueprint->foreignIdFor(\App\Models\PaymentMethod::class)
+            $blueprint->foreignIdFor(PaymentMethod::class)
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();

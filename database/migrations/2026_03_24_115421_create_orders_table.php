@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Enums\OrderStatus;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +19,7 @@ return new class extends Migration
             $blueprint->id();
 
             $blueprint->string('order_number')->unique();
-            $blueprint->foreignIdFor(\App\Models\User::class)
+            $blueprint->foreignIdFor(User::class)
                 ->nullable()
                 ->index()
                 ->constrained()
@@ -28,7 +30,7 @@ return new class extends Migration
             $blueprint->string('address');
             $blueprint->text('delivery_instructions')->nullable();
 
-            $blueprint->string('status')->default(\App\Enums\OrderStatus::INITIATED);
+            $blueprint->string('status')->default(OrderStatus::INITIATED);
 
             $blueprint->unsignedInteger('gross_total')->default(0);
             $blueprint->unsignedInteger('discount')->default(0);
