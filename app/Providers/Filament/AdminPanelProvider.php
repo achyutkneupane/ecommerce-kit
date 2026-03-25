@@ -140,12 +140,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label('Products')
+                    ->label('Product')
                     ->icon(Heroicon::CursorArrowRipple)
                     ->collapsible(false),
                 NavigationGroup::make()
                     ->label('Order')
-                    ->icon(Heroicon::OutlinedShoppingCart),
+                    ->icon(Heroicon::OutlinedShoppingCart)
+                    ->collapsible(false),
                 NavigationGroup::make()
                     ->label('Settings')
                     ->icon(Heroicon::Cog8Tooth)

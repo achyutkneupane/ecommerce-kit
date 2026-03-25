@@ -74,7 +74,7 @@ class User extends Authenticatable
         return in_array($this->role, [
             UserRole::Developer,
             UserRole::Admin,
-            UserRole::Writer,
+            UserRole::Manager,
         ]);
     }
 
@@ -82,9 +82,9 @@ class User extends Authenticatable
     public function lowerRoles(): array
     {
         return match (auth()->user()->role) {
-            UserRole::Developer => [UserRole::Developer, UserRole::Admin, UserRole::Writer, UserRole::User],
-            UserRole::Admin => [UserRole::Admin, UserRole::Writer, UserRole::User],
-            UserRole::Writer => [UserRole::Writer, UserRole::User],
+            UserRole::Developer => [UserRole::Developer, UserRole::Admin, UserRole::Manager, UserRole::User],
+            UserRole::Admin => [UserRole::Admin, UserRole::Manager, UserRole::User],
+            UserRole::Manager => [UserRole::Manager, UserRole::User],
             UserRole::User => [UserRole::User],
         };
     }
