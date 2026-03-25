@@ -18,6 +18,8 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\KeyValueEntry;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Utilities\Get;
@@ -78,6 +80,8 @@ class PaymentMethodResource extends Resource
                     ->visible(fn (Get $get): bool => in_array($get('type'), [PaymentMethodType::TEXT, PaymentMethodType::SCREENSHOT]))
                     ->columnSpanFull(),
                 KeyValue::make('settings')
+                    ->keyLabel('Setting')
+                    ->valueLabel('Value')
                     ->visible(fn (Get $get): bool => $get('type') === PaymentMethodType::THIRD_PARTY)
                     ->columnSpanFull(),
             ]);
@@ -93,6 +97,24 @@ class PaymentMethodResource extends Resource
                 TextEntry::make('name'),
                 TextEntry::make('type')
                     ->badge(),
+                TextEntry::make('settings.text')
+                    ->label('Payment Instructions')
+                    ->html()
+                    ->columnSpanFull()
+                    ->helperText('{order_id} will be replaced with the actual order ID when displayed to the user.')
+                    ->visible(fn (Get $get): bool => in_array($get('type'), [PaymentMethodType::TEXT, PaymentMethodType::SCREENSHOT])),
+                SpatieMediaLibraryImageEntry::make('cover')
+                    ->label('Screenshot')
+                    ->collection('cover')
+                    ->columnSpanFull()
+                    ->imageHeight('100%')
+                    ->imageWidth('50%')
+                    ->visible(fn (Get $get): bool => $get('type') === PaymentMethodType::SCREENSHOT),
+                KeyValueEntry::make('settings')
+                    ->visible(fn (Get $get): bool => $get('type') === PaymentMethodType::THIRD_PARTY)
+                    ->keyLabel('Setting')
+                    ->valueLabel('Value')
+                    ->columnSpanFull(),
             ]);
     }
 
