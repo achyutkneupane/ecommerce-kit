@@ -112,7 +112,7 @@ class AdminPanelProvider extends PanelProvider
                     ->default('initials')
                     ->size(200),
                 FilamentEditProfilePlugin::make()
-                    ->slug('edit-profile')
+                    ->slug()
                     ->setIcon('heroicon-o-user')
                     ->setTitle('Profile')
                     ->setNavigationLabel('Profile')

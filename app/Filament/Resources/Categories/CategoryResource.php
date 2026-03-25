@@ -30,7 +30,8 @@ class CategoryResource extends Resource
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::OutlinedQueueList;
 
     protected static ?string $recordTitleAttribute = 'name';
-    protected static string | UnitEnum | null $navigationGroup = 'Products';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Products';
 
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
