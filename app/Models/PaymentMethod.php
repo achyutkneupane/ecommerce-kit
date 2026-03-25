@@ -52,6 +52,7 @@ class PaymentMethod extends MediaModel
         return [
             'type' => PaymentMethodType::class,
             'settings' => 'array',
+            'is_active' => 'boolean',
         ];
     }
 }

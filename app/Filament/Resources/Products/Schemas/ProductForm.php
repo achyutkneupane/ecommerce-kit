@@ -26,6 +26,7 @@ class ProductForm
                     ->options(
                         fn () => Category::query()
                             ->select('id', 'name', 'parent_id')
+                            ->with('parent:id,name')
                             ->get()
                             ->groupBy(fn ($category) => $category->parent->name ?? 'Parent Categories')
                             ->map(fn ($group) => $group->pluck('name', 'id'))
@@ -34,7 +35,7 @@ class ProductForm
                     ->afterStateUpdated(
                         function (Set $set, ?int $state): void {
                             if ($state) {
-                                $specifications = Category::query()->find($state)->specifications;
+                                $specifications = Category::query()->find($state)->specifications ?? [];
                                 $mapped = array_map(
                                     fn ($specification): array => [
                                         'key' => $specification,

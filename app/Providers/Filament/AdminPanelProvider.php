@@ -12,6 +12,7 @@ use App\Filament\Commands\FileGenerators\Resources\ResourceTableClassGenerator;
 use App\Models\Scopes\LowerRoleOnly;
 use App\Models\User;
 use App\Settings\SiteSettings;
+use Awcodes\Gravatar\Enums\Defaults;
 use Awcodes\Gravatar\GravatarPlugin;
 use Awcodes\Gravatar\GravatarProvider;
 use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
@@ -103,13 +104,14 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentLogViewer::make()
+                    ->navigationGroup('Settings')
                     ->authorize(fn (): bool => auth()->user()?->role === UserRole::Developer),
                 EnvironmentIndicatorPlugin::make()
                     ->visible(fn (): bool => auth()->user()?->role === UserRole::Developer)
                     ->showDebugModeWarning()
                     ->showGitBranch(),
                 GravatarPlugin::make()
-                    ->default('initials')
+                    ->default(Defaults::Initials)
                     ->size(200),
                 FilamentEditProfilePlugin::make()
                     ->slug()
@@ -139,15 +141,15 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 NavigationGroup::make()
                     ->label('Products')
-                    ->icon(Heroicon::CursorArrowRipple),
+                    ->icon(Heroicon::CursorArrowRipple)
+                    ->collapsible(false),
                 NavigationGroup::make()
                     ->label('Order')
-                    ->collapsible(false)
                     ->icon(Heroicon::OutlinedShoppingCart),
                 NavigationGroup::make()
-                    ->label('System')
-                    ->collapsed()
-                    ->icon(Heroicon::Cog8Tooth),
+                    ->label('Settings')
+                    ->icon(Heroicon::Cog8Tooth)
+                    ->collapsed(),
             ])
             ->defaultAvatarProvider(GravatarProvider::class)
             ->maxContentWidth(Width::Full)

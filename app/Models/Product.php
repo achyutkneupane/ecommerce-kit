@@ -87,7 +87,7 @@ class Product extends MediaModel
 
     protected function quantity(): Attribute
     {
-        return Attribute::get(fn ($value): int => $this->skus->sum('quantity'));
+        return Attribute::get(fn ($value): int => $this->loadSum('skus', 'quantity')->skus_sum_quantity ?? 0);
     }
 
     protected function casts(): array

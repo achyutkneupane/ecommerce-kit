@@ -7,6 +7,8 @@ namespace App\Models;
 use AchyutN\LaravelHelpers\Models\MediaModel;
 use App\Casts\Currency;
 use App\Enums\OrderStatus;
+use App\Observers\OrderObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -64,6 +66,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
+#[ObservedBy(OrderObserver::class)]
 class Order extends MediaModel
 {
     /** @return BelongsTo<User> */

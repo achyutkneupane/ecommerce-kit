@@ -23,7 +23,7 @@ class OrderObserver
         ]);
     }
 
-    public function updated(Order $order): void
+    public function updating(Order $order): void
     {
         if ($order->isDirty('status')) {
             $order->logs()->create([
