@@ -113,7 +113,43 @@ class PaymentMethodResource extends Resource
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
+                EditAction::make()
+                    ->mutateRecordDataUsing(function (array $data): array {
+                        $type = $data['type'] ?? null;
+
+                        $text = null;
+
+                        if (in_array(PaymentMethodType::tryFrom($type), [PaymentMethodType::TEXT, PaymentMethodType::SCREENSHOT])) {
+                            $text = $data['settings']['text'] ?? '';
+                        }
+
+                        return [
+                            'name' => $data['name'],
+                            'type' => $type,
+                            'payment_instructions' => $text,
+                            'settings' => $data['settings'] ?? [],
+                            'is_active' => $data['is_active'] ?? true,
+                        ];
+                    })
+                    ->mutateDataUsing(function (array $data): array {
+                        /** @var PaymentMethodType $type */
+                        $type = $data['type'] ?? null;
+
+                        $settings = match ($type) {
+                            PaymentMethodType::TEXT, PaymentMethodType::SCREENSHOT => [
+                                'text' => $data['payment_instructions'] ?? '',
+                            ],
+                            PaymentMethodType::THIRD_PARTY => $data['settings'] ?? [],
+                            PaymentMethodType::COD => null,
+                        };
+
+                        return [
+                            'name' => $data['name'],
+                            'type' => $type,
+                            'settings' => $settings,
+                            'is_active' => $data['is_active'] ?? true,
+                        ];
+                    }),
                 DeleteAction::make(),
             ]);
     }
