@@ -18,7 +18,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string $name
  * @property PaymentMethodType $type
  * @property array<array-key, mixed>|null $settings
- * @property int $is_active
+ * @property bool $is_active
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read MediaCollection<int, Media> $media

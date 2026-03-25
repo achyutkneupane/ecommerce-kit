@@ -8,12 +8,9 @@ use App\Enums\PaymentMethodType;
 use App\Filament\Resources\PaymentMethods\Pages\ManagePaymentMethods;
 use App\Models\PaymentMethod;
 use BackedEnum;
-use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -26,7 +23,6 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
@@ -62,7 +58,7 @@ class PaymentMethodResource extends Resource
                 SpatieMediaLibraryFileUpload::make('cover')
                     ->label('Screenshot')
                     ->collection('cover')
-                    ->visible(fn (Get $get) => $get('type') === PaymentMethodType::SCREENSHOT)
+                    ->visible(fn (Get $get): bool => $get('type') === PaymentMethodType::SCREENSHOT)
                     ->helperText('')
                     ->image()
                     ->required()
@@ -77,12 +73,12 @@ class PaymentMethodResource extends Resource
                         'required',
                     ]),
                 RichEditor::make('payment_instructions')
-                    ->default(fn () => '<p>Please use <strong>{order_id}</strong> in remarks of the payment.</p>')
+                    ->default(fn (): string => '<p>Please use <strong>{order_id}</strong> in remarks of the payment.</p>')
                     ->helperText('Use {order_id} where you want to display the order ID in the instructions.')
-                    ->visible(fn (Get $get) => in_array($get('type'), [PaymentMethodType::TEXT, PaymentMethodType::SCREENSHOT]))
+                    ->visible(fn (Get $get): bool => in_array($get('type'), [PaymentMethodType::TEXT, PaymentMethodType::SCREENSHOT]))
                     ->columnSpanFull(),
                 KeyValue::make('settings')
-                    ->visible(fn (Get $get) => $get('type') === PaymentMethodType::THIRD_PARTY)
+                    ->visible(fn (Get $get): bool => $get('type') === PaymentMethodType::THIRD_PARTY)
                     ->columnSpanFull(),
             ]);
     }
