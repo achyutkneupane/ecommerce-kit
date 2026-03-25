@@ -30,6 +30,7 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -134,6 +135,19 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Edit Profile')
                     ->url(fn (): string => EditProfilePage::getUrl())
                     ->icon(Heroicon::OutlinedPencilSquare),
+            ])
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label('Products')
+                    ->icon(Heroicon::CursorArrowRipple),
+                NavigationGroup::make()
+                    ->label('Order')
+                    ->collapsible(false)
+                    ->icon(Heroicon::OutlinedShoppingCart),
+                NavigationGroup::make()
+                    ->label('System')
+                    ->collapsed()
+                    ->icon(Heroicon::Cog8Tooth),
             ])
             ->defaultAvatarProvider(GravatarProvider::class)
             ->maxContentWidth(Width::Full)

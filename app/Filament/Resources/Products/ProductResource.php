@@ -22,6 +22,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class ProductResource extends Resource
 {
@@ -32,6 +33,8 @@ class ProductResource extends Resource
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::OutlinedCursorArrowRipple;
 
     protected static ?string $recordTitleAttribute = 'title';
+
+    protected static string | UnitEnum | null $navigationGroup = 'Products';
 
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 

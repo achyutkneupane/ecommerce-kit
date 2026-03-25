@@ -19,6 +19,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class BrandResource extends Resource
 {
@@ -29,6 +30,7 @@ class BrandResource extends Resource
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'name';
+    protected static string | UnitEnum | null $navigationGroup = 'Products';
 
     public static function form(Schema $schema): Schema
     {
