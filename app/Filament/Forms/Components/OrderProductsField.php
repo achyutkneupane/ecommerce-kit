@@ -12,7 +12,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
-use Illuminate\Support\Collection;
 
 class OrderProductsField extends Repeater
 {
@@ -31,9 +30,7 @@ class OrderProductsField extends Repeater
                 ->label('Product')
                 ->searchable()
                 ->dehydrated(false)
-                ->options(
-                    fn () => Product::query()->available()->pluck('title', 'id')
-                )
+                ->options(fn () => Product::query()->available()->pluck('title', 'id'))
                 ->afterStateUpdated(function (Set $set): void {
                     $set('sku_id', null);
                     $set('quantity', null);
@@ -52,23 +49,24 @@ class OrderProductsField extends Repeater
                         return [];
                     }
 
-                    /** @var Collection<Sku> $skus */
-                    $skus = Product::query()->find($productId)->skus()->where('quantity', '>', 0)->select('specifications', 'price', 'id')->get();
+                    return Product::find($productId)?->skus()
+                        ->where('quantity', '>', 0)
+                        ->select('specifications', 'price', 'id')
+                        ->get()
+                        ->mapWithKeys(function (Sku $sku) {
+                            $specs = collect($sku->specifications)
+                                ->map(fn ($value, $key) => sprintf('%s: %s', ucfirst($key), $value))
+                                ->implode(', ');
 
-                    return $skus->mapWithKeys(function (Sku $sku) {
-                        $specs = collect($sku->specifications)->map(fn ($value, $key) => sprintf('%s: %s', ucfirst($key), $value))->implode(', ');
-
-                        return [
-                            $sku->id => sprintf('%s (%s)', $specs, $sku->price),
-                        ];
-                    })->toArray();
+                            return [$sku->id => sprintf('%s (%s)', $specs, $sku->price)];
+                        })->toArray() ?? [];
                 })
                 ->required()
                 ->live(),
             TextInput::make('quantity')
                 ->label('Quantity')
-                ->maxValue(fn (Get $get): int => self::getQuantity($get))
-                ->helperText(fn (Get $get): string => 'Available: '.self::getQuantity($get))
+                ->maxValue(fn (Get $get): int => self::getAvailableQuantity($get))
+                ->helperText(fn (Get $get): string => 'Available: '.self::getAvailableQuantity($get))
                 ->numeric()
                 ->required()
                 ->live(),
@@ -86,29 +84,24 @@ class OrderProductsField extends Repeater
         return parent::make($name);
     }
 
-
-    private static function getQuantity(Get $get): int
+    private static function getAvailableQuantity(Get $get): int
     {
         $productId = $get('product_id');
         $skuId = $get('sku_id');
 
-        if (! $skuId) {
+        if (! $productId) {
             return 0;
         }
 
         return cache()->remember(
-            sprintf('product-%s-sku-%s-quantity', $productId, $skuId),
+            sprintf('product-%s-sku-%s-quantity', $productId, $skuId ?? 'base'),
             now()->addMinutes(5),
             function () use ($productId, $skuId): int {
                 if ($skuId) {
-                    return Sku::query()->find($skuId)->quantity;
+                    return Sku::find($skuId)?->quantity ?? 0;
                 }
 
-                if ($productId) {
-                    return Product::query()->find($productId)->quantity;
-                }
-
-                return 0;
+                return Product::find($productId)?->quantity ?? 0;
             }
         );
     }
