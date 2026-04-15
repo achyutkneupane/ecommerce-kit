@@ -85,7 +85,7 @@ final class SearchCustomerAction extends Action
             $customer = User::query()->find($customerId);
 
             if ($customer) {
-                $set('name', $customer->name);
+                $set('full_name', $customer->name);
                 $set('email', $customer->email);
                 $set('phone', $customer->phone);
                 $set('address', $customer->address);

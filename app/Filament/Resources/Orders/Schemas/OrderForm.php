@@ -24,7 +24,7 @@ class OrderForm
                     ->columns()
                     ->collapsible()
                     ->components([
-                        TextInput::make('name')
+                        TextInput::make('full_name')
                             ->label('Customer Name')
                             ->live()
                             ->prefixAction(SearchCustomerAction::make())
