@@ -14,15 +14,10 @@ class OrderInfolist
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Customer Details')
                     ->columns()
                     ->columnSpanFull()
                     ->components([
-                        TextEntry::make('code')
-                            ->placeholder('-'),
-                        TextEntry::make('user_id')
-                            ->numeric()
-                            ->placeholder('-'),
                         TextEntry::make('full_name'),
                         TextEntry::make('email')
                             ->label('Email address'),
@@ -31,24 +26,36 @@ class OrderInfolist
                         TextEntry::make('delivery_instructions')
                             ->placeholder('-')
                             ->columnSpanFull(),
-                        TextEntry::make('status')
-                            ->badge(),
+                    ]),
+                Section::make('Pricing')
+                    ->columns(1)
+                    ->columnSpanFull()
+                    ->components([
                         TextEntry::make('gross_total')
-                            ->numeric(),
+                            ->inlineLabel()
+                            ->badge()
+                            ->hidden(fn ($state) => $state === 0)
+                            ->money(),
                         TextEntry::make('discount')
-                            ->numeric(),
+                            ->inlineLabel()
+                            ->badge()
+                            ->hidden(fn ($state) => $state === 0)
+                            ->money(),
                         TextEntry::make('delivery_charge')
-                            ->numeric(),
+                            ->inlineLabel()
+                            ->badge()
+                            ->hidden(fn ($state) => $state === 0)
+                            ->money(),
                         TextEntry::make('tax')
-                            ->numeric(),
+                            ->inlineLabel()
+                            ->badge()
+                            ->hidden(fn ($state) => $state === 0)
+                            ->money(),
                         TextEntry::make('net_total')
-                            ->numeric(),
-                        TextEntry::make('created_at')
-                            ->dateTime()
-                            ->placeholder('-'),
-                        TextEntry::make('updated_at')
-                            ->dateTime()
-                            ->placeholder('-'),
+                            ->inlineLabel()
+                            ->badge()
+                            ->hidden(fn ($state) => $state === 0)
+                            ->money(),
                     ]),
             ]);
     }
