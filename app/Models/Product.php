@@ -8,6 +8,7 @@ use AchyutN\LaravelHelpers\Models\MediaModel;
 use AchyutN\LaravelHelpers\Traits\HasTheSlug;
 use App\Observers\ProductObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -67,6 +68,14 @@ class Product extends MediaModel
     use HasTheSlug;
     use SoftDeletes;
 
+    #[Scope]
+    public static function available(Builder $builder): Builder
+    {
+        return $builder->whereHas('skus', function (Builder $builder): Builder {
+            return $builder->where('quantity', '>', 0);
+        });
+    }
+
     /** @return BelongsTo<Category> */
     public function category(): BelongsTo
     {
@@ -87,7 +96,7 @@ class Product extends MediaModel
 
     protected function quantity(): Attribute
     {
-        return Attribute::get(fn ($value): int => $this->loadSum('skus', 'quantity')->skus_sum_quantity ?? 0);
+        return Attribute::get(fn ($value): int => (int) $this->loadSum('skus', 'quantity')->skus_sum_quantity ?? 0);
     }
 
     protected function casts(): array

@@ -18,6 +18,8 @@ return new class extends Migration
             $blueprint->id();
             $blueprint->string('name');
             $blueprint->string('email')->unique();
+            $blueprint->string('phone')->nullable();
+            $blueprint->string('address')->nullable();
             $blueprint->string('role')->default(UserRole::User);
             $blueprint->timestamp('email_verified_at')->nullable();
             $blueprint->string('password');
