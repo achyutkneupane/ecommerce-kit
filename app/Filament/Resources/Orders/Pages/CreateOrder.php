@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Orders\Pages;
 
+use App\Enums\OrderStatus;
 use App\Filament\Resources\Orders\OrderResource;
 use App\Models\Order;
 use App\Models\Sku;
@@ -63,6 +64,7 @@ class CreateOrder extends CreateRecord
                 'delivery_instructions' => $data['delivery_instructions'] ?? '',
                 'gross_total' => $grossTotal,
                 'net_total' => $netTotal,
+                'status' => OrderStatus::INITIATED,
             ]);
 
         $order->items()->createMany($items);
