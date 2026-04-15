@@ -7,6 +7,7 @@ namespace App\Filament\Resources\Orders\Pages;
 use App\Filament\Resources\Orders\OrderResource;
 use App\Models\Order;
 use App\Models\Sku;
+use App\Models\User;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,24 +17,6 @@ class CreateOrder extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-//        array:6 [▼ // app/Filament/Resources/Orders/Pages/CreateOrder.php:17
-//  "full_name" => "Ecommerce User"
-//  "email" => "user@test.com"
-//  "phone" => "9860323771"
-//  "address" => "Dharan"
-//  "delivery_instructions" => null
-//  "items" => array:2 [▼
-//    0 => array:2 [▼
-//      "sku_id" => 1
-//      "quantity" => 2.0
-//    ]
-//    1 => array:2 [▼
-//      "sku_id" => 2
-//      "quantity" => 2.0
-//    ]
-//  ]
-//]
-
         $skus = Sku::query()
             ->whereIn('id', array_column($data['items'] ?? [], 'sku_id'))
             ->get()
@@ -48,9 +31,10 @@ class CreateOrder extends CreateRecord
             $loopTotal = $sku->price * $item['quantity'];
 
             $grossTotal += $loopTotal;
+
             $items[] = [
                 'sku_id' => $item['sku_id'],
-                'product' => $sku->product->name,
+                'product' => $sku->product->title,
                 'sku_code' => $sku->code,
                 'properties' => $sku->specifications,
                 'unit_price' => $sku->price,
@@ -59,14 +43,26 @@ class CreateOrder extends CreateRecord
             ];
         }
 
+        $netTotal = $grossTotal;
+
+        $user = User::firstOrCreate([
+            'phone' => $data['phone'] ?? '',
+        ], [
+            'name' => $data['full_name'] ?? '',
+            'email' => $data['email'] ?? '',
+            'address' => $data['address'] ?? '',
+        ]);
+
         $order = Order::query()
             ->create([
+                'user_id' => $user->id,
                 'full_name' => $data['full_name'] ?? '',
                 'email' => $data['email'] ?? '',
                 'phone' => $data['phone'] ?? '',
                 'address' => $data['address'] ?? '',
                 'delivery_instructions' => $data['delivery_instructions'] ?? '',
                 'gross_total' => $grossTotal,
+                'net_total' => $netTotal,
             ]);
 
         $order->items()->createMany($items);

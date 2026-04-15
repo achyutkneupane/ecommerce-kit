@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Settings\SiteSettings;
 
@@ -19,7 +20,7 @@ class OrderObserver
         $order->saveQuietly();
 
         $order->logs()->create([
-            'status' => $order->status,
+            'status' => $order->status ?? OrderStatus::INITIATED,
         ]);
     }
 
