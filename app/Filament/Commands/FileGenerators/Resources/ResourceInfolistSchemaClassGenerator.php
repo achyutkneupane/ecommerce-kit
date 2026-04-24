@@ -2,6 +2,7 @@
 
 namespace App\Filament\Commands\FileGenerators\Resources;
 
+use Override;
 use Filament\Commands\FileGenerators\Resources\Schemas\ResourceInfolistSchemaClassGenerator as BaseResourceInfolistSchemaClassGenerator;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
@@ -14,6 +15,7 @@ class ResourceInfolistSchemaClassGenerator extends BaseResourceInfolistSchemaCla
      * @param  ?class-string<Model>  $model
      * @param  array<string>  $exceptColumns
      */
+    #[Override]
     public function outputInfolistComponents(?string $model = null, array $exceptColumns = []): string
     {
         $components = $this->getInfolistComponents($model, $exceptColumns);

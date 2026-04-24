@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Models\Brand;
+use App\Models\Category;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('products', function (Blueprint $blueprint): void {
+            $blueprint->id();
+            $blueprint->string('code')
+                ->nullable()
+                ->unique();
+            $blueprint->string('title');
+            $blueprint->string('slug')->unique();
+            $blueprint->foreignIdFor(Category::class)
+                ->constrained()
+                ->cascadeOnDelete();
+            $blueprint->foreignIdFor(Brand::class)
+                ->nullable()
+                ->constrained()
+                ->cascadeOnDelete();
+            $blueprint->json('specifications')->nullable();
+            $blueprint->unsignedInteger('sku_sequence')->default(1);
+            $blueprint->softDeletes();
+            $blueprint->timestamps();
+
+            $blueprint->index(['category_id', 'brand_id']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('products');
+    }
+};

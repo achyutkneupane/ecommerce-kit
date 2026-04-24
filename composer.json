@@ -8,6 +8,8 @@
     "require": {
         "php": "^8.3",
         "achyutn/filament-log-viewer": "^2.1",
+        "achyutn/filament-storage-monitor": "^1.2",
+        "achyutn/laravel-helpers": "^0.11.1",
         "achyutn/laravel-seo": "^1.4",
         "awcodes/filament-gravatar": "^4.0",
         "dutchcodingcompany/filament-developer-logins": "^2.1",
@@ -24,13 +26,16 @@
         "barryvdh/laravel-ide-helper": "^3.7",
         "driftingly/rector-laravel": "^2.1",
         "fakerphp/faker": "^1.23",
+        "laravel/boost": "^2.4",
         "laravel/pail": "^1.2.5",
         "laravel/pint": "^1.27",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
         "pestphp/pest": "^4.4",
         "pestphp/pest-plugin-laravel": "^4.1",
-        "pxlrbt/filament-environment-indicator": "^3.5"
+        "pxlrbt/filament-environment-indicator": "^3.5",
+        "revolution/laravel-boost-phpstorm-copilot": "^2.0",
+        "xefi/faker-php-laravel": "^1.2"
     },
     "autoload": {
         "psr-4": {
@@ -79,6 +84,10 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "lint": [
+            "rector",
+            "pint --config=pint.json"
         ]
     },
     "extra": {

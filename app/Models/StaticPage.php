@@ -12,15 +12,15 @@ use AchyutN\LaravelSEO\Models\SEO;
 use AchyutN\LaravelSEO\Schemas\PageSchema;
 use AchyutN\LaravelSEO\Traits\InteractsWithSEO;
 use App\Enums\PageType;
-use CyrildeWit\EloquentViewable\Contracts\Viewable;
-use CyrildeWit\EloquentViewable\InteractsWithViews;
-use CyrildeWit\EloquentViewable\Support\Period;
-use CyrildeWit\EloquentViewable\View;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Override;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
@@ -34,16 +34,14 @@ use Illuminate\Support\Carbon;
  * @property string|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
  * @property-read SEO|null $seo
  * @property-read string $url
- * @property-read Collection<int, View> $views
- * @property-read int|null $views_count
  *
  * @method static Builder<static>|StaticPage findSimilarSlugs(string $attribute, array $config, string $slug)
  * @method static Builder<static>|StaticPage newModelQuery()
  * @method static Builder<static>|StaticPage newQuery()
- * @method static Builder<static>|StaticPage orderByUniqueViews(string $direction = 'desc', $period = null, ?string $collection = null, string $as = 'unique_views_count')
- * @method static Builder<static>|StaticPage orderByViews(string $direction = 'desc', ?Period $period = null, ?string $collection = null, bool $unique = false, string $as = 'views_count')
  * @method static Builder<static>|StaticPage query()
  * @method static Builder<static>|StaticPage whereContent($value)
  * @method static Builder<static>|StaticPage whereCreatedAt($value)
@@ -57,15 +55,18 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|StaticPage whereType($value)
  * @method static Builder<static>|StaticPage whereUpdatedAt($value)
  * @method static Builder<static>|StaticPage withUniqueSlugConstraints(Model $model, string $attribute, array $config, string $slug)
- * @method static Builder<static>|StaticPage withViewsCount(?Period $period = null, ?string $collection = null, bool $unique = false, string $as = 'views_count')
  *
  * @mixin \Eloquent
  */
-final class StaticPage extends Model implements HasMarkup
+#[Fillable(['title', 'slug', 'description', 'content', 'name', 'type', 'tags'])]
+final class StaticPage extends MediaModel implements HasMarkup
 {
+    use HasFactory;
+    use HasTheSlug;
     use InteractsWithSEO;
     use PageSchema;
 
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'slug';
@@ -137,6 +138,7 @@ final class StaticPage extends Model implements HasMarkup
         );
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

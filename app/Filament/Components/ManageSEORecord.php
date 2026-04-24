@@ -11,6 +11,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 class ManageSEORecord extends EditRecord
 {
@@ -20,12 +21,14 @@ class ManageSEORecord extends EditRecord
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::MagnifyingGlass;
 
+    #[Override]
     public function mount(int|string $record): void
     {
         $this->record = $this->resolveRecord($record)->load('seo');
         $this->form->fill($this->record?->seo?->toArray() ?? []);
     }
 
+    #[Override]
     public function form(Schema $schema): Schema
     {
         return $schema
@@ -33,11 +36,13 @@ class ManageSEORecord extends EditRecord
             ->schema(SEOForm::schema());
     }
 
+    #[Override]
     public function getTitle(): string|Htmlable
     {
         return parent::getTitle().' SEO';
     }
 
+    #[Override]
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
         SEO::query()->updateOrCreate([

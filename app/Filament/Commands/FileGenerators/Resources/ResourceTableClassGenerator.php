@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Commands\FileGenerators\Resources;
 
+use Override;
 use App\Filament\Components\SEOAction;
 use App\Traits\HasSEODetails;
 use Filament\Commands\FileGenerators\Resources\Schemas\ResourceTableClassGenerator as BaseResourceTableClassGenerator;
@@ -12,6 +13,7 @@ use ReflectionException;
 
 class ResourceTableClassGenerator extends BaseResourceTableClassGenerator
 {
+    #[Override]
     public function getTableActions(): array
     {
         $actions = parent::getTableActions();

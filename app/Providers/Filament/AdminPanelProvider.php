@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers\Filament;
 
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
@@ -10,6 +12,7 @@ use App\Filament\Commands\FileGenerators\Resources\ResourceTableClassGenerator;
 use App\Models\Scopes\LowerRoleOnly;
 use App\Models\User;
 use App\Settings\SiteSettings;
+use Awcodes\Gravatar\Enums\Defaults;
 use Awcodes\Gravatar\GravatarPlugin;
 use Awcodes\Gravatar\GravatarProvider;
 use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
@@ -28,6 +31,7 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -43,12 +47,11 @@ use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\Routing\Router;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Facades\URL;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
+use Override;
 use pxlrbt\FilamentEnvironmentIndicator\EnvironmentIndicatorPlugin;
 use Spatie\LaravelSettings\Settings;
 
@@ -102,16 +105,17 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentLogViewer::make()
+                    ->navigationGroup('Settings')
                     ->authorize(fn (): bool => auth()->user()?->role === UserRole::Developer),
                 EnvironmentIndicatorPlugin::make()
                     ->visible(fn (): bool => auth()->user()?->role === UserRole::Developer)
                     ->showDebugModeWarning()
                     ->showGitBranch(),
                 GravatarPlugin::make()
-                    ->default('initials')
+                    ->default(Defaults::Initials)
                     ->size(200),
                 FilamentEditProfilePlugin::make()
-                    ->slug('edit-profile')
+                    ->slug()
                     ->setIcon('heroicon-o-user')
                     ->setTitle('Profile')
                     ->setNavigationLabel('Profile')
@@ -135,6 +139,20 @@ class AdminPanelProvider extends PanelProvider
                     ->url(fn (): string => EditProfilePage::getUrl())
                     ->icon(Heroicon::OutlinedPencilSquare),
             ])
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label('Product')
+                    ->icon(Heroicon::CursorArrowRipple)
+                    ->collapsible(false),
+                NavigationGroup::make()
+                    ->label('Order')
+                    ->icon(Heroicon::OutlinedShoppingCart)
+                    ->collapsible(false),
+                NavigationGroup::make()
+                    ->label('Settings')
+                    ->icon(Heroicon::Cog8Tooth)
+                    ->collapsed(),
+            ])
             ->defaultAvatarProvider(GravatarProvider::class)
             ->maxContentWidth(Width::Full)
             ->globalSearch(false)
@@ -144,6 +162,7 @@ class AdminPanelProvider extends PanelProvider
             ->spa();
     }
 
+    #[Override]
     public function register(): void
     {
         parent::register();

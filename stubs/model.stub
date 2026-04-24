@@ -1,0 +1,13 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+{{ factoryImport }}
+use AchyutN\LaravelHelpers\Models\MediaModel;
+
+class {{ class }} extends MediaModel
+{
+    {{ factory }}
+}

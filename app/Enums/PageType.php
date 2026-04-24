@@ -12,7 +12,7 @@ enum PageType: string implements HasColor, HasLabel
 {
     case LandingPage = 'landing_page';
     case IndexPage = 'index_page';
-    case ContentPage = 'content_page';
+    case ContentPage = 'content_page'; // default value in migration. Don't change the value
     case PageWithForm = 'page_with_form';
 
     public function getColor(): array

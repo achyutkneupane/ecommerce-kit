@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Commands\FileGenerators\Resources;
 
+use Override;
 use App\Filament\Components\ManageSEORecord;
 use Filament\Commands\FileGenerators\Concerns\CanGenerateGetHeaderActionsMethod;
 use Filament\Commands\FileGenerators\Resources\Pages\Concerns\CanGenerateResourceProperty;
@@ -33,6 +34,7 @@ class ResourceSEOPageClassGenerator extends ClassGenerator
     /**
      * @return array<string>
      */
+    #[Override]
     public function getImports(): array
     {
         $extends = $this->getExtends();

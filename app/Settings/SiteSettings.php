@@ -12,6 +12,8 @@ final class SiteSettings extends Settings
 
     public ?string $description;
 
+    public ?string $store_prefix;
+
     public ?string $logo;
 
     public ?string $favicon;

@@ -20,7 +20,7 @@ enum UserRole: string implements HasColor, HasIcon, HasLabel
 
     case Manager = 'manager';
 
-    case User = 'user';
+    case User = 'user'; // default value in migration. Don't change the value
 
     public function getLabel(): ?string
     {
@@ -47,7 +47,7 @@ enum UserRole: string implements HasColor, HasIcon, HasLabel
         return match ($this) {
             self::Developer => Heroicon::CodeBracket,
             self::Admin => Heroicon::ShieldCheck,
-            self::Writer => Heroicon::PencilSquare,
+            self::Manager => Heroicon::PencilSquare,
             self::User => Heroicon::UserCircle,
         };
     }
