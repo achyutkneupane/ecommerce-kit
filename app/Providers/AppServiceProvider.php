@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Agents\AntigravityAgent;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Boost\Boost;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,6 +40,10 @@ class AppServiceProvider extends ServiceProvider
         if (app()->isProduction()) {
             URL::useOrigin(config('app.url'));
             URL::forceScheme('https');
+        }
+
+        if (app()->isLocal()) {
+            Boost::registerAgent('antigravity', AntigravityAgent::class);
         }
     }
 }
