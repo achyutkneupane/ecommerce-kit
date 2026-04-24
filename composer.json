@@ -33,7 +33,8 @@
         "pestphp/pest": "^4.4",
         "pestphp/pest-plugin-laravel": "^4.1",
         "pxlrbt/filament-environment-indicator": "^3.5",
-        "revolution/laravel-boost-phpstorm-copilot": "^2.0"
+        "revolution/laravel-boost-phpstorm-copilot": "^2.0",
+        "xefi/faker-php-laravel": "^1.2"
     },
     "autoload": {
         "psr-4": {
