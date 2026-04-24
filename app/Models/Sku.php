@@ -6,6 +6,7 @@ namespace App\Models;
 
 use AchyutN\LaravelHelpers\Models\MediaModel;
 use App\Casts\Currency;
+use App\Enums\LoyaltyMode;
 use App\Observers\SkuObserver;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -69,7 +70,7 @@ class Sku extends MediaModel
         return [
             'specifications' => 'array',
             'price' => Currency::class,
-            'loyalty_mode' => \App\Enums\LoyaltyMode::class,
+            'loyalty_mode' => LoyaltyMode::class,
             'loyalty_amount' => 'integer',
         ];
     }

@@ -6,11 +6,21 @@ namespace Database\Seeders;
 
 use App\Enums\PageType;
 use App\Enums\UserRole;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Payment;
+use App\Models\PaymentMethod;
+use App\Models\Product;
+use App\Models\Sku;
 use App\Models\StaticPage;
 use App\Models\User;
 use App\Settings\SiteSettings;
+use Faker\Generator;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -86,44 +96,44 @@ class DatabaseSeeder extends Seeder
 
     private function seedEcommerceData(): void
     {
-        $faker = app(\Faker\Generator::class);
+        $generator = resolve(Generator::class);
 
         $categories = collect(['Electronics', 'Fashion', 'Home & Living'])->map(function ($name) {
-            return \App\Models\Category::query()->firstOrCreate(
-                ['slug' => \Illuminate\Support\Str::slug($name)],
+            return Category::query()->firstOrCreate(
+                ['slug' => Str::slug($name)],
                 ['name' => $name]
             );
         });
 
-        $brands = collect($faker->ecommerceBrand('Electronics'))
-            ->merge($faker->ecommerceBrand('Fashion'))
-            ->merge($faker->ecommerceBrand('Home & Living'))
+        $brands = collect($generator->ecommerceBrand('Electronics'))
+            ->merge($generator->ecommerceBrand('Fashion'))
+            ->merge($generator->ecommerceBrand('Home & Living'))
             ->unique()
             ->map(function ($name) {
-                return \App\Models\Brand::query()->firstOrCreate(
-                    ['slug' => \Illuminate\Support\Str::slug($name)],
+                return Brand::query()->firstOrCreate(
+                    ['slug' => Str::slug($name)],
                     ['name' => $name]
                 );
             });
 
         if ($brands->count() < 15) {
-            $brands = $brands->concat(\App\Models\Brand::factory()->count(15 - $brands->count())->create());
+            $brands = $brands->concat(Brand::factory()->count(15 - $brands->count())->create());
         }
 
         // Create products and orders only if missing
-        if (\App\Models\Product::count() < 200) {
+        if (Product::query()->count() < 200) {
             // Create 200 products
-            \App\Models\Product::factory()
+            Product::factory()
                 ->count(200)
-                ->sequence(fn ($sequence) => [
+                ->sequence(fn ($sequence): array => [
                     'category_id' => $categories->random()->id,
                     'brand_id' => $brands->random()->id,
                 ])
                 ->create()
-                ->each(function ($product) use ($faker) {
+                ->each(function ($product) use ($generator): void {
                     // 4-5 SKUs each
-                    \App\Models\Sku::factory()
-                        ->count($faker->numberBetween(4, 5))
+                    Sku::factory()
+                        ->count($generator->numberBetween(4, 5))
                         ->create(['product_id' => $product->id]);
                 });
 
@@ -131,16 +141,16 @@ class DatabaseSeeder extends Seeder
             User::factory()->count(50)->create();
 
             // Some Payment Methods
-            $paymentMethods = \App\Models\PaymentMethod::factory()->count(3)->create();
+            $paymentMethods = PaymentMethod::factory()->count(3)->create();
 
             // Some Orders
-            \App\Models\Order::factory()
+            Order::factory()
                 ->count(30)
                 ->create()
-                ->each(function ($order) use ($faker) {
-                    $skus = \App\Models\Sku::inRandomOrder()->take(rand(1, 3))->get();
+                ->each(function ($order) use ($generator): void {
+                    $skus = Sku::query()->inRandomOrder()->take(rand(1, 3))->get();
                     foreach ($skus as $sku) {
-                        \App\Models\OrderItem::factory()->create([
+                        OrderItem::factory()->create([
                             'order_id' => $order->id,
                             'sku_id' => $sku->id,
                         ]);
@@ -153,10 +163,10 @@ class DatabaseSeeder extends Seeder
                     $order->saveQuietly();
 
                     // Payment for some
-                    if ($faker->boolean(70)) {
-                        \App\Models\Payment::factory()->create([
+                    if ($generator->boolean(70)) {
+                        Payment::factory()->create([
                             'order_id' => $order->id,
-                            'payment_method_id' => \App\Models\PaymentMethod::inRandomOrder()->first()->id,
+                            'payment_method_id' => PaymentMethod::query()->inRandomOrder()->first()->id,
                             'amount' => $order->net_total, // net_total is already human unit (float)
                         ]);
                     }
@@ -165,9 +175,9 @@ class DatabaseSeeder extends Seeder
 
         // Static Pages
         collect(['About Us', 'Contact Us', 'Privacy Policy', 'Terms of Service', 'Return Policy'])
-            ->each(function ($title) {
+            ->each(function ($title): void {
                 StaticPage::query()->firstOrCreate(
-                    ['slug' => \Illuminate\Support\Str::slug($title)],
+                    ['slug' => Str::slug($title)],
                     [
                         'title' => $title,
                         'type' => PageType::ContentPage,

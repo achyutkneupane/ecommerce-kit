@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\Products\Schemas;
 
 use App\Actions\Products\ApplyCategorySpecifications;
+use App\Enums\LoyaltyMode;
 use App\Models\Category;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
@@ -69,14 +70,14 @@ class ProductForm
                         Grid::make(2)
                             ->schema([
                                 Select::make('loyalty_mode')
-                                    ->options(\App\Enums\LoyaltyMode::class)
+                                    ->options(LoyaltyMode::class)
                                     ->nullable()
                                     ->live(),
                                 TextInput::make('loyalty_amount')
                                     ->numeric()
                                     ->nullable()
-                                    ->visible(fn (callable $get) => $get('loyalty_mode') !== null)
-                                    ->label(fn (callable $get) => $get('loyalty_mode') === \App\Enums\LoyaltyMode::Percentage->value ? 'Percentage (%)' : 'Points per Unit'),
+                                    ->visible(fn (callable $get): bool => $get('loyalty_mode') !== null)
+                                    ->label(fn (callable $get): string => $get('loyalty_mode') === LoyaltyMode::Percentage->value ? 'Percentage (%)' : 'Points per Unit'),
                             ]),
                     ]),
             ]);

@@ -7,8 +7,8 @@ namespace Database\Factories;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use Faker\Generator;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Product>
@@ -22,16 +22,15 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $faker = app(\Faker\Generator::class);
-        $categoryName = $faker->ecommerceCategory();
-        $title = $faker->ecommerceProductTitle($categoryName);
+        $generator = resolve(Generator::class);
+        $categoryName = $generator->ecommerceCategory();
+        $title = $generator->ecommerceProductTitle($categoryName);
 
         return [
             'title' => $title,
-            'slug' => Str::slug($title),
             'category_id' => Category::factory()->state(['name' => $categoryName]),
-            'brand_id' => Brand::factory()->state(['name' => $faker->ecommerceBrand($categoryName)]),
-            'specifications' => $faker->ecommerceSpecifications($categoryName),
+            'brand_id' => Brand::factory()->state(['name' => $generator->ecommerceBrand($categoryName)]),
+            'specifications' => $generator->ecommerceSpecifications($categoryName),
             'sku_sequence' => 0,
         ];
     }

@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Products\Resources\Skus\Schemas;
 
+use App\Enums\LoyaltyMode;
 use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class SkuForm
@@ -23,20 +27,20 @@ class SkuForm
                     ->keyLabel('Specification')
                     ->valueLabel('Value')
                     ->columnSpanFull(),
-                \Filament\Schemas\Components\Section::make('Loyalty Program')
+                Section::make('Loyalty Program')
                     ->description('Override product loyalty settings for this SKU')
                     ->schema([
-                        \Filament\Schemas\Components\Grid::make(2)
+                        Grid::make(2)
                             ->schema([
-                                \Filament\Forms\Components\Select::make('loyalty_mode')
-                                    ->options(\App\Enums\LoyaltyMode::class)
+                                Select::make('loyalty_mode')
+                                    ->options(LoyaltyMode::class)
                                     ->nullable()
                                     ->live(),
                                 TextInput::make('loyalty_amount')
                                     ->numeric()
                                     ->nullable()
-                                    ->visible(fn (callable $get) => $get('loyalty_mode') !== null)
-                                    ->label(fn (callable $get) => $get('loyalty_mode') === \App\Enums\LoyaltyMode::Percentage->value ? 'Percentage (%)' : 'Points per Unit'),
+                                    ->visible(fn (callable $get): bool => $get('loyalty_mode') !== null)
+                                    ->label(fn (callable $get): string => $get('loyalty_mode') === LoyaltyMode::Percentage->value ? 'Percentage (%)' : 'Points per Unit'),
                             ]),
                     ]),
             ]);

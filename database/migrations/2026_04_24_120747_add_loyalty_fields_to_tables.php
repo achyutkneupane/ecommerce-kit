@@ -13,28 +13,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $blueprint): void {
             if (! Schema::hasColumn('users', 'loyalty_points')) {
-                $table->integer('loyalty_points')->default(0)->after('password');
+                $blueprint->integer('loyalty_points')->default(0)->after('password');
             }
         });
 
-        Schema::table('products', function (Blueprint $table) {
-            $table->string('loyalty_mode')->nullable()->after('title');
-            $table->integer('loyalty_amount')->nullable()->after('loyalty_mode');
+        Schema::table('products', function (Blueprint $blueprint): void {
+            $blueprint->string('loyalty_mode')->nullable()->after('title');
+            $blueprint->integer('loyalty_amount')->nullable()->after('loyalty_mode');
         });
 
-        Schema::table('skus', function (Blueprint $table) {
-            $table->string('loyalty_mode')->nullable()->after('price');
-            $table->integer('loyalty_amount')->nullable()->after('loyalty_mode');
+        Schema::table('skus', function (Blueprint $blueprint): void {
+            $blueprint->string('loyalty_mode')->nullable()->after('price');
+            $blueprint->integer('loyalty_amount')->nullable()->after('loyalty_mode');
         });
 
-        Schema::table('orders', function (Blueprint $table) {
-            $table->index('status');
+        Schema::table('orders', function (Blueprint $blueprint): void {
+            $blueprint->index('status');
         });
 
-        Schema::table('order_logs', function (Blueprint $table) {
-            $table->index('status');
+        Schema::table('order_logs', function (Blueprint $blueprint): void {
+            $blueprint->index('status');
         });
     }
 
@@ -43,24 +43,24 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('order_logs', function (Blueprint $table) {
-            $table->dropIndex(['status']);
+        Schema::table('order_logs', function (Blueprint $blueprint): void {
+            $blueprint->dropIndex(['status']);
         });
 
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropIndex(['status']);
+        Schema::table('orders', function (Blueprint $blueprint): void {
+            $blueprint->dropIndex(['status']);
         });
 
-        Schema::table('skus', function (Blueprint $table) {
-            $table->dropColumn(['loyalty_mode', 'loyalty_amount']);
+        Schema::table('skus', function (Blueprint $blueprint): void {
+            $blueprint->dropColumn(['loyalty_mode', 'loyalty_amount']);
         });
 
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn(['loyalty_mode', 'loyalty_amount']);
+        Schema::table('products', function (Blueprint $blueprint): void {
+            $blueprint->dropColumn(['loyalty_mode', 'loyalty_amount']);
         });
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('loyalty_points');
+        Schema::table('users', function (Blueprint $blueprint): void {
+            $blueprint->dropColumn('loyalty_points');
         });
     }
 };

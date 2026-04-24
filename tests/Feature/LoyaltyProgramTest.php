@@ -15,12 +15,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('it awards loyalty points when order is delivered', function () {
-    $settings = resolve(LoyaltySettings::class);
-    $settings->enabled = true;
-    $settings->mode = LoyaltyMode::Flat;
-    $settings->amount = 10;
-    $settings->save();
+test('it awards loyalty points when order is delivered', function (): void {
+    $loyaltySettings = resolve(LoyaltySettings::class);
+    $loyaltySettings->enabled = true;
+    $loyaltySettings->mode = LoyaltyMode::Flat;
+    $loyaltySettings->amount = 10;
+    $loyaltySettings->save();
 
     $user = User::factory()->create(['loyalty_points' => 0]);
     $product = Product::factory()->create();
@@ -47,12 +47,12 @@ test('it awards loyalty points when order is delivered', function () {
     expect($user->loyalty_points)->toBe(20); // 10 points * 2 qty
 });
 
-test('it uses percentage mode for loyalty points', function () {
-    $settings = resolve(LoyaltySettings::class);
-    $settings->enabled = true;
-    $settings->mode = LoyaltyMode::Percentage;
-    $settings->amount = 5; // 5%
-    $settings->save();
+test('it uses percentage mode for loyalty points', function (): void {
+    $loyaltySettings = resolve(LoyaltySettings::class);
+    $loyaltySettings->enabled = true;
+    $loyaltySettings->mode = LoyaltyMode::Percentage;
+    $loyaltySettings->amount = 5; // 5%
+    $loyaltySettings->save();
 
     $user = User::factory()->create(['loyalty_points' => 0]);
     $sku = Sku::factory()->create(['price' => 1000]);
@@ -74,12 +74,12 @@ test('it uses percentage mode for loyalty points', function () {
     expect($user->loyalty_points)->toBe(50); // 5% of 1000
 });
 
-test('it respects product overrides', function () {
-    $settings = resolve(LoyaltySettings::class);
-    $settings->enabled = true;
-    $settings->mode = LoyaltyMode::Flat;
-    $settings->amount = 10;
-    $settings->save();
+test('it respects product overrides', function (): void {
+    $loyaltySettings = resolve(LoyaltySettings::class);
+    $loyaltySettings->enabled = true;
+    $loyaltySettings->mode = LoyaltyMode::Flat;
+    $loyaltySettings->amount = 10;
+    $loyaltySettings->save();
 
     $user = User::factory()->create(['loyalty_points' => 0]);
     $product = Product::factory()->create([
@@ -105,12 +105,12 @@ test('it respects product overrides', function () {
     expect($user->loyalty_points)->toBe(100); // 10% of 1000
 });
 
-test('it respects SKU overrides', function () {
-    $settings = resolve(LoyaltySettings::class);
-    $settings->enabled = true;
-    $settings->mode = LoyaltyMode::Flat;
-    $settings->amount = 10;
-    $settings->save();
+test('it respects SKU overrides', function (): void {
+    $loyaltySettings = resolve(LoyaltySettings::class);
+    $loyaltySettings->enabled = true;
+    $loyaltySettings->mode = LoyaltyMode::Flat;
+    $loyaltySettings->amount = 10;
+    $loyaltySettings->save();
 
     $user = User::factory()->create(['loyalty_points' => 0]);
     $product = Product::factory()->create([
@@ -140,10 +140,10 @@ test('it respects SKU overrides', function () {
     expect($user->loyalty_points)->toBe(100);
 });
 
-test('it does not award points if disabled', function () {
-    $settings = resolve(LoyaltySettings::class);
-    $settings->enabled = false;
-    $settings->save();
+test('it does not award points if disabled', function (): void {
+    $loyaltySettings = resolve(LoyaltySettings::class);
+    $loyaltySettings->enabled = false;
+    $loyaltySettings->save();
 
     $user = User::factory()->create(['loyalty_points' => 0]);
     $sku = Sku::factory()->create();

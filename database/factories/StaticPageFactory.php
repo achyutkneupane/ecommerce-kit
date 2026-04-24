@@ -7,7 +7,6 @@ namespace Database\Factories;
 use App\Enums\PageType;
 use App\Models\StaticPage;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory<StaticPage>
@@ -23,7 +22,6 @@ class StaticPageFactory extends Factory
 
         return [
             'title' => $title,
-            'slug' => Str::slug($title),
             'description' => fake()->paragraph(),
             'content' => fake()->paragraphs(3, true),
             'name' => null,

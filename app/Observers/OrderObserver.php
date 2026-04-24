@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
+use App\Enums\LoyaltyMode;
 use App\Enums\OrderStatus;
 use App\Models\Order;
+use App\Settings\LoyaltySettings;
 use App\Settings\SiteSettings;
 
 class OrderObserver
@@ -46,8 +48,8 @@ class OrderObserver
             return;
         }
 
-        $settings = resolve(\App\Settings\LoyaltySettings::class);
-        if (! $settings->enabled) {
+        $loyaltySettings = resolve(LoyaltySettings::class);
+        if (! $loyaltySettings->enabled) {
             return;
         }
 
@@ -58,12 +60,12 @@ class OrderObserver
             $sku = $item->sku;
             $product = $sku?->product;
 
-            $mode = $sku?->loyalty_mode ?? $product?->loyalty_mode ?? $settings->mode;
-            $amount = $sku?->loyalty_amount ?? $product?->loyalty_amount ?? $settings->amount;
+            $mode = $sku?->loyalty_mode ?? $product?->loyalty_mode ?? $loyaltySettings->mode;
+            $amount = $sku?->loyalty_amount ?? $product?->loyalty_amount ?? $loyaltySettings->amount;
 
             $totalPoints += match ($mode) {
-                \App\Enums\LoyaltyMode::Flat => (int) ($amount * $item->quantity),
-                \App\Enums\LoyaltyMode::Percentage => (int) (($item->subtotal * $amount) / 100),
+                LoyaltyMode::Flat => (int) ($amount * $item->quantity),
+                LoyaltyMode::Percentage => (int) (($item->subtotal * $amount) / 100),
             };
         }
 

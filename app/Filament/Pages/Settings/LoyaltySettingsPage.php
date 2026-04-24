@@ -39,13 +39,13 @@ class LoyaltySettingsPage extends SettingsPage
                         Select::make('mode')
                             ->options(LoyaltyMode::class)
                             ->required()
-                            ->hidden(fn (callable $get) => ! $get('enabled'))
+                            ->hidden(fn (callable $get): bool => ! $get('enabled'))
                             ->live(),
                         TextInput::make('amount')
                             ->numeric()
                             ->required()
-                            ->hidden(fn (callable $get) => ! $get('enabled'))
-                            ->label(fn (callable $get) => $get('mode') === LoyaltyMode::Percentage->value ? 'Percentage (%)' : 'Points per Unit'),
+                            ->hidden(fn (callable $get): bool => ! $get('enabled'))
+                            ->label(fn (callable $get): string => $get('mode') === LoyaltyMode::Percentage->value ? 'Percentage (%)' : 'Points per Unit'),
                     ]),
             ]);
     }

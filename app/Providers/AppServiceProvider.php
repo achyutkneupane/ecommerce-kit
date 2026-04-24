@@ -6,7 +6,9 @@ namespace App\Providers;
 
 use App\Agents\AntigravityAgent;
 use App\Enums\UserRole;
+use App\Faker\EcommerceProvider;
 use App\Models\User;
+use Faker\Generator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
@@ -23,8 +25,8 @@ class AppServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        $this->app->extend(\Faker\Generator::class, function (\Faker\Generator $faker) {
-            $faker->addProvider(new \App\Faker\EcommerceProvider($faker));
+        $this->app->extend(Generator::class, function (Generator $faker): Generator {
+            $faker->addProvider(new EcommerceProvider($faker));
 
             return $faker;
         });

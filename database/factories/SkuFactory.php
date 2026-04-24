@@ -6,6 +6,7 @@ namespace Database\Factories;
 
 use App\Models\Product;
 use App\Models\Sku;
+use Faker\Generator;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,18 +21,18 @@ class SkuFactory extends Factory
      */
     public function definition(): array
     {
-        $faker = app(\Faker\Generator::class);
+        $generator = resolve(Generator::class);
 
         return [
             'product_id' => Product::factory(),
-            'code' => $faker->unique()->bothify('SKU-####-????'),
-            'price' => $faker->randomFloat(2, 50, 2000), // $50 to $2000
-            'quantity' => $faker->numberBetween(5, 50),
-            'specifications' => function (array $attributes) use ($faker) {
-                $product = Product::find($attributes['product_id']);
-                $categoryName = $product?->category?->name ?? $faker->ecommerceCategory();
+            'code' => $generator->unique()->bothify('SKU-####-????'),
+            'price' => $generator->randomFloat(2, 50, 2000), // $50 to $2000
+            'quantity' => $generator->numberBetween(5, 50),
+            'specifications' => function (array $attributes) use ($generator) {
+                $product = Product::query()->find($attributes['product_id']);
+                $categoryName = $product?->category?->name ?? $generator->ecommerceCategory();
 
-                return $faker->ecommerceVariantProperties($categoryName);
+                return $generator->ecommerceVariantProperties($categoryName);
             },
         ];
     }

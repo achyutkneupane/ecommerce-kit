@@ -9,6 +9,7 @@ use AchyutN\LaravelHelpers\Traits\HasTheSlug;
 use AchyutN\LaravelSEO\Contracts\HasMarkup;
 use AchyutN\LaravelSEO\Schemas\ProductSchema;
 use AchyutN\LaravelSEO\Traits\InteractsWithSEO;
+use App\Enums\LoyaltyMode;
 use App\Observers\ProductObserver;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -114,7 +115,7 @@ class Product extends MediaModel implements HasMarkup
     {
         return [
             'specifications' => 'array',
-            'loyalty_mode' => \App\Enums\LoyaltyMode::class,
+            'loyalty_mode' => LoyaltyMode::class,
             'loyalty_amount' => 'integer',
         ];
     }
