@@ -6,9 +6,12 @@ namespace App\Models;
 
 use AchyutN\LaravelHelpers\Models\MediaModel;
 use App\Enums\OrderStatus;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Override;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -35,14 +38,18 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
+#[Fillable(['order_id', 'status', 'notes'])]
 class OrderLog extends MediaModel
 {
+    use HasFactory;
+
     /** @return BelongsTo<Order> */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

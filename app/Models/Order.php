@@ -8,12 +8,15 @@ use AchyutN\LaravelHelpers\Models\MediaModel;
 use App\Casts\Currency;
 use App\Enums\OrderStatus;
 use App\Observers\OrderObserver;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Override;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -66,9 +69,12 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
+#[Fillable(['code', 'user_id', 'full_name', 'email', 'phone', 'address', 'delivery_instructions', 'status', 'gross_total', 'discount', 'delivery_charge', 'tax', 'net_total'])]
 #[ObservedBy(OrderObserver::class)]
 class Order extends MediaModel
 {
+    use HasFactory;
+
     /** @return BelongsTo<User> */
     public function customer(): BelongsTo
     {
@@ -93,6 +99,7 @@ class Order extends MediaModel
         return $this->hasMany(OrderLog::class);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

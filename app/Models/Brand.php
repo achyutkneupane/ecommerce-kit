@@ -6,8 +6,13 @@ namespace App\Models;
 
 use AchyutN\LaravelHelpers\Models\MediaModel;
 use AchyutN\LaravelHelpers\Traits\HasTheSlug;
+use AchyutN\LaravelSEO\Contracts\HasMarkup;
+use AchyutN\LaravelSEO\Schemas\ProductSchema;
+use AchyutN\LaravelSEO\Traits\InteractsWithSEO;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
@@ -38,9 +43,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
-class Brand extends MediaModel
+#[Fillable(['name', 'slug'])]
+class Brand extends MediaModel implements HasMarkup
 {
+    use HasFactory;
     use HasTheSlug;
+    use InteractsWithSEO;
+    use ProductSchema;
 
     protected string $sluggableColumn = 'name';
 

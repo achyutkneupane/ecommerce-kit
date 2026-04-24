@@ -22,6 +22,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Override;
 use UnitEnum;
 
 class ProductResource extends Resource
@@ -38,21 +39,25 @@ class ProductResource extends Resource
 
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    #[Override]
     public static function form(Schema $schema): Schema
     {
         return ProductForm::configure($schema);
     }
 
+    #[Override]
     public static function infolist(Schema $schema): Schema
     {
         return ProductInfolist::configure($schema);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return ProductsTable::configure($table);
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -60,6 +65,7 @@ class ProductResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [
@@ -71,6 +77,7 @@ class ProductResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()
@@ -79,6 +86,7 @@ class ProductResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function getRecordSubNavigation(Page $page): array
     {
         return $page->generateNavigationItems([

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Products\Resources\Skus\Tables;
 
+use App\Actions\Skus\UpdateSkuQuantity;
 use App\Models\Sku;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
@@ -55,11 +56,7 @@ class SkusTable
                             ->formatStateUsing(fn (Sku $sku) => $sku->quantity)
                             ->required(),
                     ])
-                    ->action(function ($record, array $data): void {
-                        $record->update([
-                            'quantity' => $data['quantity'],
-                        ]);
-                    }),
+                    ->action(fn (Sku $sku, array $data, UpdateSkuQuantity $updateSkuQuantity) => $updateSkuQuantity->handle($sku, (int) $data['quantity'])),
             ]);
     }
 }

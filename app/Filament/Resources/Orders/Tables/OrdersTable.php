@@ -21,12 +21,12 @@ class OrdersTable
             ->columns([
                 TextColumn::make('code'),
                 TextColumn::make('customer')
-                    ->getStateUsing(fn ($record) => static::getCustomerRecord($record))
+                    ->getStateUsing(fn (Order $order): string => static::getCustomerRecord($order))
                     ->html(),
                 TextColumn::make('status')
                     ->badge(),
                 TextColumn::make('amount')
-                    ->getStateUsing(fn ($record) => static::getAmountRecord($record))
+                    ->getStateUsing(fn (Order $order): string => static::getAmountRecord($order))
                     ->html(),
                 TextColumn::make('items_count')
                     ->label('Items')
@@ -62,11 +62,7 @@ class OrdersTable
     {
         $grossTotal = '<strong>Gross Total:</strong> '.number_format($order->gross_total, 2);
 
-        if ($order->discount > 0) {
-            $discount = '<br><strong>Discount:</strong> '.number_format($order->discount, 2);
-        } else {
-            $discount = '';
-        }
+        $discount = $order->discount > 0 ? '<br><strong>Discount:</strong> '.number_format($order->discount, 2) : '';
 
         if ($order->delivery_charge > 0) {
             $deliveryCharge = '<br><strong>Delivery Charge: </strong>'.number_format($order->delivery_charge, 2);
@@ -74,11 +70,7 @@ class OrdersTable
             $deliveryCharge = '';
         }
 
-        if ($order->tax > 0) {
-            $tax = '<br><strong>Tax:</strong> '.number_format($order->tax, 2);
-        } else {
-            $tax = '';
-        }
+        $tax = $order->tax > 0 ? '<br><strong>Tax:</strong> '.number_format($order->tax, 2) : '';
 
         $netTotal = '<br><strong>Net Total:</strong> '.number_format($order->net_total, 2);
 

@@ -21,6 +21,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Override;
 
 class SkuResource extends Resource
 {
@@ -40,21 +41,25 @@ class SkuResource extends Resource
 
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    #[Override]
     public static function form(Schema $schema): Schema
     {
         return SkuForm::configure($schema);
     }
 
+    #[Override]
     public static function infolist(Schema $schema): Schema
     {
         return SkuInfolist::configure($schema);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return SkusTable::configure($table);
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -62,6 +67,7 @@ class SkuResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [
@@ -71,6 +77,7 @@ class SkuResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()
@@ -79,6 +86,7 @@ class SkuResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function getRecordSubNavigation(Page $page): array
     {
         return $page->generateNavigationItems([

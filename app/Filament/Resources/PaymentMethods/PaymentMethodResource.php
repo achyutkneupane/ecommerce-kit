@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\PaymentMethods;
 
+use App\Actions\PaymentMethods\PaymentMethodAction;
 use App\Enums\PaymentMethodType;
 use App\Filament\Resources\PaymentMethods\Pages\ManagePaymentMethods;
 use App\Models\PaymentMethod;
@@ -28,6 +29,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
+use Override;
 use UnitEnum;
 
 class PaymentMethodResource extends Resource
@@ -42,6 +44,7 @@ class PaymentMethodResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Settings';
 
+    #[Override]
     public static function form(Schema $schema): Schema
     {
         return $schema
@@ -87,6 +90,7 @@ class PaymentMethodResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function infolist(Schema $schema): Schema
     {
         return $schema
@@ -118,6 +122,7 @@ class PaymentMethodResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
@@ -136,46 +141,13 @@ class PaymentMethodResource extends Resource
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make()
-                    ->mutateRecordDataUsing(function (array $data): array {
-                        $type = $data['type'] ?? null;
-
-                        $text = null;
-
-                        if (in_array(PaymentMethodType::tryFrom($type), [PaymentMethodType::TEXT, PaymentMethodType::SCREENSHOT])) {
-                            $text = $data['settings']['text'] ?? '';
-                        }
-
-                        return [
-                            'name' => $data['name'],
-                            'type' => $type,
-                            'payment_instructions' => $text,
-                            'settings' => $data['settings'] ?? [],
-                            'is_active' => $data['is_active'] ?? true,
-                        ];
-                    })
-                    ->mutateDataUsing(function (array $data): array {
-                        /** @var PaymentMethodType $type */
-                        $type = $data['type'] ?? null;
-
-                        $settings = match ($type) {
-                            PaymentMethodType::TEXT, PaymentMethodType::SCREENSHOT => [
-                                'text' => $data['payment_instructions'] ?? '',
-                            ],
-                            PaymentMethodType::THIRD_PARTY => $data['settings'] ?? [],
-                            PaymentMethodType::COD => null,
-                        };
-
-                        return [
-                            'name' => $data['name'],
-                            'type' => $type,
-                            'settings' => $settings,
-                            'is_active' => $data['is_active'] ?? true,
-                        ];
-                    }),
+                    ->mutateRecordDataUsing(fn (array $data): array => resolve(PaymentMethodAction::class)->mutateRecordData($data))
+                    ->mutateDataUsing(fn (array $data): array => resolve(PaymentMethodAction::class)->mutateData($data)),
                 DeleteAction::make(),
             ]);
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

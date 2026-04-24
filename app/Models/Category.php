@@ -6,12 +6,18 @@ namespace App\Models;
 
 use AchyutN\LaravelHelpers\Models\MediaModel;
 use AchyutN\LaravelHelpers\Traits\HasTheSlug;
+use AchyutN\LaravelSEO\Contracts\HasMarkup;
+use AchyutN\LaravelSEO\Schemas\PageSchema;
+use AchyutN\LaravelSEO\Traits\InteractsWithSEO;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Override;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -46,9 +52,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
-class Category extends MediaModel
+#[Fillable(['name', 'slug', 'parent_id', 'specifications'])]
+class Category extends MediaModel implements HasMarkup
 {
+    use HasFactory;
     use HasTheSlug;
+    use InteractsWithSEO;
+    use PageSchema;
 
     protected string $sluggableColumn = 'name';
 
@@ -70,6 +80,7 @@ class Category extends MediaModel
         return $this->hasMany(Product::class);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

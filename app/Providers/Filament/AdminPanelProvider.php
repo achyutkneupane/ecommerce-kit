@@ -51,6 +51,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
+use Override;
 use pxlrbt\FilamentEnvironmentIndicator\EnvironmentIndicatorPlugin;
 use Spatie\LaravelSettings\Settings;
 
@@ -161,6 +162,7 @@ class AdminPanelProvider extends PanelProvider
             ->spa();
     }
 
+    #[Override]
     public function register(): void
     {
         parent::register();

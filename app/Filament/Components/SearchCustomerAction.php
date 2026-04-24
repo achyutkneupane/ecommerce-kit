@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Components;
 
+use App\Actions\Customers\ApplyCustomerToOrder;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
@@ -47,17 +48,7 @@ final class SearchCustomerAction extends Action
                     }
                 )
                 ->live()
-                ->afterStateUpdated(function (Set $set, string $state): void {
-                    $customer = User::query()->find($state);
-                    if ($customer) {
-                        $set('full_name', $customer->name);
-                        $set('email', $customer->email);
-                        $set('phone', $customer->phone);
-                        $set('address', $customer->address);
-                    } else {
-                        $set('customer_details', null);
-                    }
-                })
+                ->afterStateUpdated(fn (Set $set, ?string $state, ApplyCustomerToOrder $applyCustomerToOrder): mixed => $state ? $applyCustomerToOrder->handle($set, (int) $state) : $set('customer_details', null))
                 ->preload(),
             Section::make('Customer Details')
                 ->hidden(fn (Get $get): bool => is_null($get('customer')))
@@ -80,17 +71,7 @@ final class SearchCustomerAction extends Action
 
         $this->modalSubmitActionLabel('Enter Details');
 
-        $this->action(function (Set $set, array $data): void {
-            $customerId = $data['customer'];
-            $customer = User::query()->find($customerId);
-
-            if ($customer) {
-                $set('full_name', $customer->name);
-                $set('email', $customer->email);
-                $set('phone', $customer->phone);
-                $set('address', $customer->address);
-            }
-        });
+        $this->action(fn (Set $set, array $data, ApplyCustomerToOrder $applyCustomerToOrder) => $applyCustomerToOrder->handle($set, (int) $data['customer']));
     }
 
     public static function getDefaultName(): string

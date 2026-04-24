@@ -19,6 +19,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Override;
 use UnitEnum;
 
 class CategoryResource extends Resource
@@ -35,21 +36,25 @@ class CategoryResource extends Resource
 
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    #[Override]
     public static function form(Schema $schema): Schema
     {
         return CategoryForm::configure($schema);
     }
 
+    #[Override]
     public static function infolist(Schema $schema): Schema
     {
         return CategoryInfolist::configure($schema);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return CategoriesTable::configure($table);
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -57,6 +62,7 @@ class CategoryResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [
@@ -67,6 +73,7 @@ class CategoryResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getRecordSubNavigation(Page $page): array
     {
         return $page->generateNavigationItems([

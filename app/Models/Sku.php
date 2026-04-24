@@ -7,11 +7,14 @@ namespace App\Models;
 use AchyutN\LaravelHelpers\Models\MediaModel;
 use App\Casts\Currency;
 use App\Observers\SkuObserver;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Override;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -47,9 +50,11 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
+#[Fillable(['product_id', 'code', 'price', 'quantity', 'specifications'])]
 #[ObservedBy(SkuObserver::class)]
 class Sku extends MediaModel
 {
+    use HasFactory;
     use SoftDeletes;
 
     /** @return BelongsTo<Product> */
@@ -58,6 +63,7 @@ class Sku extends MediaModel
         return $this->belongsTo(Product::class);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

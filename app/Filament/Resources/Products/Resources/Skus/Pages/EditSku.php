@@ -10,11 +10,13 @@ use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
+use Override;
 
 class EditSku extends EditRecord
 {
     protected static string $resource = SkuResource::class;
 
+    #[Override]
     protected function getHeaderActions(): array
     {
         return [

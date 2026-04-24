@@ -8,11 +8,13 @@ use App\Filament\Resources\Orders\OrderResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
+use Override;
 
 class EditOrder extends EditRecord
 {
     protected static string $resource = OrderResource::class;
 
+    #[Override]
     protected function getHeaderActions(): array
     {
         return [

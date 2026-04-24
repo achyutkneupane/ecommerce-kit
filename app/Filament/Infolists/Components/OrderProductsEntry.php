@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\Infolists\Components;
 
-use App\Models\Product;
+use App\Services\OrderService;
 use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\RepeatableEntry\TableColumn;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
+use Override;
 
 class OrderProductsEntry extends RepeatableEntry
 {
@@ -16,17 +18,18 @@ class OrderProductsEntry extends RepeatableEntry
 
     public string $grossTotalFieldName = 'gross_total';
 
+    #[Override]
     protected function setUp(): void
     {
         parent::label('Products');
         parent::hiddenLabel();
         parent::placeholder('');
-        parent::state(fn (Get $get, Set $set): array => $this->resolveProductsState($get, $set));
+        parent::state(fn (Get $get, Set $set, OrderService $orderService): array => $this->resolveProductsState($get, $set, $orderService));
         parent::table([
-            RepeatableEntry\TableColumn::make('Product'),
-            RepeatableEntry\TableColumn::make('Unit Price'),
-            RepeatableEntry\TableColumn::make('Quantity'),
-            RepeatableEntry\TableColumn::make('Subtotal'),
+            TableColumn::make('Product'),
+            TableColumn::make('Unit Price'),
+            TableColumn::make('Quantity'),
+            TableColumn::make('Subtotal'),
         ]);
         parent::schema([
             TextEntry::make('name_entry')->label('Product'),
@@ -37,6 +40,7 @@ class OrderProductsEntry extends RepeatableEntry
         parent::columnSpanFull();
     }
 
+    #[Override]
     public static function make(?string $name = 'products'): static
     {
         return parent::make($name);
@@ -56,51 +60,12 @@ class OrderProductsEntry extends RepeatableEntry
         return $this;
     }
 
-    protected function resolveProductsState(Get $get, Set $set): array
+    protected function resolveProductsState(Get $get, Set $set, OrderService $orderService): array
     {
-        $productsState = collect($get($this->formFieldName) ?? [])
-            ->filter(fn ($item) => ! empty($item['product_id']) && ! empty($item['sku_id']) && ! empty($item['quantity']));
+        $result = $orderService->calculateOrderTotals($get($this->formFieldName) ?? []);
 
-        if ($productsState->isEmpty()) {
-            $set($this->grossTotalFieldName, 0);
+        $set($this->grossTotalFieldName, $result['grossTotal']);
 
-            return [];
-        }
-
-        $productIds = $productsState->pluck('product_id')->unique();
-        $loadedProducts = Product::with('skus')->whereIn('id', $productIds)->get()->keyBy('id');
-
-        $grossTotal = 0;
-        $repeatableProducts = [];
-
-        foreach ($productsState as $productLine) {
-            $product = $loadedProducts->get($productLine['product_id']);
-            $sku = $product?->skus->firstWhere('id', $productLine['sku_id']);
-
-            if (! $product || ! $sku) {
-                continue;
-            }
-
-            $specs = collect($sku->specifications)
-                ->map(fn ($value, $key) => sprintf('%s: %s', ucfirst($key), $value))
-                ->implode(', ');
-
-            $unitPrice = $sku->price ?? 0;
-            $quantity = (int) $productLine['quantity'];
-            $subtotal = $unitPrice * $quantity;
-
-            $grossTotal += $subtotal;
-
-            $repeatableProducts[] = [
-                'name_entry' => sprintf('%s (%s)', $product->title, $specs),
-                'unit_price' => $unitPrice,
-                'quantity' => $quantity,
-                'subtotal' => $subtotal,
-            ];
-        }
-
-        $set($this->grossTotalFieldName, $grossTotal);
-
-        return $repeatableProducts;
+        return $result['products'];
     }
 }

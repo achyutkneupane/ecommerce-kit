@@ -6,12 +6,14 @@ namespace App\Filament\Forms\Components;
 
 use App\Models\Product;
 use App\Models\Sku;
+use App\Services\StockService;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Repeater\TableColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
+use Override;
 
 class OrderProductsField extends Repeater
 {
@@ -49,24 +51,24 @@ class OrderProductsField extends Repeater
                         return [];
                     }
 
-                    return Product::find($productId)?->skus()
+                    return Product::query()->find($productId)?->skus()
                         ->where('quantity', '>', 0)
                         ->select('specifications', 'price', 'id')
                         ->get()
-                        ->mapWithKeys(function (Sku $sku) {
+                        ->mapWithKeys(function (Sku $sku): array {
                             $specs = collect($sku->specifications)
-                                ->map(fn ($value, $key) => sprintf('%s: %s', ucfirst($key), $value))
+                                ->map(fn ($value, $key): string => sprintf('%s: %s', ucfirst($key), $value))
                                 ->implode(', ');
 
                             return [$sku->id => sprintf('%s (%s)', $specs, $sku->price)];
-                        })->toArray() ?? [];
+                        })->all() ?? [];
                 })
                 ->required()
                 ->live(),
             TextInput::make('quantity')
                 ->label('Quantity')
-                ->maxValue(fn (Get $get): int => self::getAvailableQuantity($get))
-                ->helperText(fn (Get $get): string => 'Available: '.self::getAvailableQuantity($get))
+                ->maxValue(fn (Get $get, StockService $stockService): int => $stockService->getAvailableQuantity((int) $get('product_id'), $get('sku_id') ? (int) $get('sku_id') : null))
+                ->helperText(fn (Get $get, StockService $stockService): string => 'Available: '.$stockService->getAvailableQuantity((int) $get('product_id'), $get('sku_id') ? (int) $get('sku_id') : null))
                 ->numeric()
                 ->required()
                 ->live(),
@@ -79,30 +81,9 @@ class OrderProductsField extends Repeater
         ]);
     }
 
+    #[Override]
     public static function make(?string $name = 'products'): static
     {
         return parent::make($name);
-    }
-
-    private static function getAvailableQuantity(Get $get): int
-    {
-        $productId = $get('product_id');
-        $skuId = $get('sku_id');
-
-        if (! $productId) {
-            return 0;
-        }
-
-        return cache()->remember(
-            sprintf('product-%s-sku-%s-quantity', $productId, $skuId ?? 'base'),
-            now()->addMinutes(5),
-            function () use ($productId, $skuId): int {
-                if ($skuId) {
-                    return Sku::find($skuId)?->quantity ?? 0;
-                }
-
-                return Product::find($productId)?->quantity ?? 0;
-            }
-        );
     }
 }

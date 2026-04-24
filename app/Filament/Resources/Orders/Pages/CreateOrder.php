@@ -11,11 +11,13 @@ use App\Models\Sku;
 use App\Models\User;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 class CreateOrder extends CreateRecord
 {
     protected static string $resource = OrderResource::class;
 
+    #[Override]
     protected function handleRecordCreation(array $data): Model
     {
         $skus = Sku::query()
@@ -46,7 +48,7 @@ class CreateOrder extends CreateRecord
 
         $netTotal = $grossTotal;
 
-        $user = User::firstOrCreate([
+        $user = User::query()->firstOrCreate([
             'phone' => $data['phone'] ?? '',
         ], [
             'name' => $data['full_name'] ?? '',

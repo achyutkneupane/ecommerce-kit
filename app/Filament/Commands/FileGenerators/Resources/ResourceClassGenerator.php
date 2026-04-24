@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Commands\FileGenerators\Resources;
 
+use Override;
 use App\Traits\HasSEODetails;
 use Filament\Commands\FileGenerators\Resources\ResourceClassGenerator as BaseResourceClassGenerator;
 use Filament\Pages\Enums\SubNavigationPosition;
@@ -18,6 +19,7 @@ use ReflectionException;
 
 class ResourceClassGenerator extends BaseResourceClassGenerator
 {
+    #[Override]
     public function getPageRoutes(): array
     {
         $routes = parent::getPageRoutes();
@@ -34,6 +36,7 @@ class ResourceClassGenerator extends BaseResourceClassGenerator
         return $routes;
     }
 
+    #[Override]
     protected function addNavigationIconPropertyToClass(ClassType $class): void
     {
         parent::addNavigationIconPropertyToClass($class);
@@ -50,6 +53,7 @@ class ResourceClassGenerator extends BaseResourceClassGenerator
         $this->configureNavigationIconProperty($property);
     }
 
+    #[Override]
     protected function addPropertiesToClass(ClassType $class): void
     {
         parent::addPropertiesToClass($class);
@@ -66,6 +70,7 @@ class ResourceClassGenerator extends BaseResourceClassGenerator
             ->setType(SubNavigationPosition::class.'|null');
     }
 
+    #[Override]
     protected function addMethodsToClass(ClassType $class): void
     {
         parent::addMethodsToClass($class);

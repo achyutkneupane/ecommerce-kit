@@ -6,10 +6,13 @@ namespace App\Models;
 
 use AchyutN\LaravelHelpers\Models\MediaModel;
 use App\Enums\PaymentMethodType;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Override;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -39,14 +42,18 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
+#[Fillable(['name', 'type', 'settings', 'is_active'])]
 class PaymentMethod extends MediaModel
 {
+    use HasFactory;
+
     /** @return HasMany<Payment> */
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

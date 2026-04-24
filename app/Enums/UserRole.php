@@ -47,7 +47,7 @@ enum UserRole: string implements HasColor, HasIcon, HasLabel
         return match ($this) {
             self::Developer => Heroicon::CodeBracket,
             self::Admin => Heroicon::ShieldCheck,
-            self::Writer => Heroicon::PencilSquare,
+            self::Manager => Heroicon::PencilSquare,
             self::User => Heroicon::UserCircle,
         };
     }

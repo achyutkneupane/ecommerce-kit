@@ -34,27 +34,27 @@ class OrderInfolist
                         TextEntry::make('gross_total')
                             ->inlineLabel()
                             ->badge()
-                            ->hidden(fn ($state) => $state === 0)
+                            ->hidden(fn ($state): bool => $state === 0)
                             ->money(),
                         TextEntry::make('discount')
                             ->inlineLabel()
                             ->badge()
-                            ->hidden(fn ($state) => $state === 0)
+                            ->hidden(fn ($state): bool => $state === 0)
                             ->money(),
                         TextEntry::make('delivery_charge')
                             ->inlineLabel()
                             ->badge()
-                            ->hidden(fn ($state) => $state === 0)
+                            ->hidden(fn ($state): bool => $state === 0)
                             ->money(),
                         TextEntry::make('tax')
                             ->inlineLabel()
                             ->badge()
-                            ->hidden(fn ($state) => $state === 0)
+                            ->hidden(fn ($state): bool => $state === 0)
                             ->money(),
                         TextEntry::make('net_total')
                             ->inlineLabel()
                             ->badge()
-                            ->hidden(fn ($state) => $state === 0)
+                            ->hidden(fn ($state): bool => $state === 0)
                             ->money(),
                     ]),
             ]);

@@ -6,17 +6,23 @@ namespace App\Models;
 
 use AchyutN\LaravelHelpers\Models\MediaModel;
 use AchyutN\LaravelHelpers\Traits\HasTheSlug;
+use AchyutN\LaravelSEO\Contracts\HasMarkup;
+use AchyutN\LaravelSEO\Schemas\ProductSchema;
+use AchyutN\LaravelSEO\Traits\InteractsWithSEO;
 use App\Observers\ProductObserver;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Override;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -62,10 +68,14 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
+#[Fillable(['title', 'slug', 'category_id', 'brand_id', 'specifications', 'sku_sequence'])]
 #[ObservedBy(ProductObserver::class)]
-class Product extends MediaModel
+class Product extends MediaModel implements HasMarkup
 {
+    use HasFactory;
     use HasTheSlug;
+    use InteractsWithSEO;
+    use ProductSchema;
     use SoftDeletes;
 
     #[Scope]
@@ -99,6 +109,7 @@ class Product extends MediaModel
         return Attribute::get(fn ($value): int => (int) $this->loadSum('skus', 'quantity')->skus_sum_quantity ?? 0);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

@@ -12,10 +12,13 @@ use AchyutN\LaravelSEO\Models\SEO;
 use AchyutN\LaravelSEO\Schemas\PageSchema;
 use AchyutN\LaravelSEO\Traits\InteractsWithSEO;
 use App\Enums\PageType;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Override;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -55,12 +58,15 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
+#[Fillable(['title', 'slug', 'description', 'content', 'name', 'type', 'tags'])]
 final class StaticPage extends MediaModel implements HasMarkup
 {
+    use HasFactory;
     use HasTheSlug;
     use InteractsWithSEO;
     use PageSchema;
 
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'slug';
@@ -132,6 +138,7 @@ final class StaticPage extends MediaModel implements HasMarkup
         );
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [
