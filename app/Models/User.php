@@ -59,8 +59,12 @@ use Override;
  *
  * @mixin \Eloquent
  */
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
+#[Fillable(['name', 'email', 'password', 'loyalty_points'])]
+#[Hidden([
+    'password',
+    'loyalty_points',
+    'remember_token',
+])]
 #[ScopedBy(LowerRoleOnly::class)]
 class User extends Authenticatable
 {
@@ -111,6 +115,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'loyalty_points' => 'integer',
             'role' => UserRole::class,
         ];
     }

@@ -50,7 +50,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
-#[Fillable(['product_id', 'code', 'price', 'quantity', 'specifications'])]
+#[Fillable(['product_id', 'code', 'price', 'quantity', 'specifications', 'loyalty_mode', 'loyalty_amount'])]
 #[ObservedBy(SkuObserver::class)]
 class Sku extends MediaModel
 {
@@ -69,6 +69,8 @@ class Sku extends MediaModel
         return [
             'specifications' => 'array',
             'price' => Currency::class,
+            'loyalty_mode' => \App\Enums\LoyaltyMode::class,
+            'loyalty_amount' => 'integer',
         ];
     }
 }

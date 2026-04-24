@@ -78,7 +78,7 @@ class Order extends MediaModel
     /** @return BelongsTo<User> */
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /** @return HasMany<OrderItem> */

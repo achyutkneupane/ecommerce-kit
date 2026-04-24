@@ -63,6 +63,22 @@ class ProductForm
                             JS)
                             ->columnSpanFull(),
                     ]),
+                Section::make('Loyalty Program')
+                    ->description('Override global loyalty settings for this product')
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                Select::make('loyalty_mode')
+                                    ->options(\App\Enums\LoyaltyMode::class)
+                                    ->nullable()
+                                    ->live(),
+                                TextInput::make('loyalty_amount')
+                                    ->numeric()
+                                    ->nullable()
+                                    ->visible(fn (callable $get) => $get('loyalty_mode') !== null)
+                                    ->label(fn (callable $get) => $get('loyalty_mode') === \App\Enums\LoyaltyMode::Percentage->value ? 'Percentage (%)' : 'Points per Unit'),
+                            ]),
+                    ]),
             ]);
     }
 }

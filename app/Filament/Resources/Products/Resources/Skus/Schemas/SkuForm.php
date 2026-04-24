@@ -23,6 +23,22 @@ class SkuForm
                     ->keyLabel('Specification')
                     ->valueLabel('Value')
                     ->columnSpanFull(),
+                \Filament\Schemas\Components\Section::make('Loyalty Program')
+                    ->description('Override product loyalty settings for this SKU')
+                    ->schema([
+                        \Filament\Schemas\Components\Grid::make(2)
+                            ->schema([
+                                \Filament\Forms\Components\Select::make('loyalty_mode')
+                                    ->options(\App\Enums\LoyaltyMode::class)
+                                    ->nullable()
+                                    ->live(),
+                                TextInput::make('loyalty_amount')
+                                    ->numeric()
+                                    ->nullable()
+                                    ->visible(fn (callable $get) => $get('loyalty_mode') !== null)
+                                    ->label(fn (callable $get) => $get('loyalty_mode') === \App\Enums\LoyaltyMode::Percentage->value ? 'Percentage (%)' : 'Points per Unit'),
+                            ]),
+                    ]),
             ]);
     }
 }

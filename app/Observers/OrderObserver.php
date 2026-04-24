@@ -32,4 +32,43 @@ class OrderObserver
             ]);
         }
     }
+
+    public function updated(Order $order): void
+    {
+        if ($order->isDirty('status') && $order->status === OrderStatus::DELIVERED) {
+            $this->awardLoyaltyPoints($order);
+        }
+    }
+
+    protected function awardLoyaltyPoints(Order $order): void
+    {
+        if (! $order->user_id) {
+            return;
+        }
+
+        $settings = resolve(\App\Settings\LoyaltySettings::class);
+        if (! $settings->enabled) {
+            return;
+        }
+
+        $totalPoints = 0;
+        $order->load('items.sku.product');
+
+        foreach ($order->items as $item) {
+            $sku = $item->sku;
+            $product = $sku?->product;
+
+            $mode = $sku?->loyalty_mode ?? $product?->loyalty_mode ?? $settings->mode;
+            $amount = $sku?->loyalty_amount ?? $product?->loyalty_amount ?? $settings->amount;
+
+            $totalPoints += match ($mode) {
+                \App\Enums\LoyaltyMode::Flat => (int) ($amount * $item->quantity),
+                \App\Enums\LoyaltyMode::Percentage => (int) (($item->subtotal * $amount) / 100),
+            };
+        }
+
+        if ($totalPoints > 0) {
+            $order->customer->increment('loyalty_points', $totalPoints);
+        }
+    }
 }

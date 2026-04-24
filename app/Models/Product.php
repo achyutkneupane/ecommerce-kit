@@ -68,7 +68,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin \Eloquent
  */
-#[Fillable(['title', 'slug', 'category_id', 'brand_id', 'specifications', 'sku_sequence'])]
+#[Fillable(['title', 'slug', 'category_id', 'brand_id', 'specifications', 'sku_sequence', 'loyalty_mode', 'loyalty_amount'])]
 #[ObservedBy(ProductObserver::class)]
 class Product extends MediaModel implements HasMarkup
 {
@@ -114,6 +114,8 @@ class Product extends MediaModel implements HasMarkup
     {
         return [
             'specifications' => 'array',
+            'loyalty_mode' => \App\Enums\LoyaltyMode::class,
+            'loyalty_amount' => 'integer',
         ];
     }
 }
