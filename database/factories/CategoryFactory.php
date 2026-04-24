@@ -20,7 +20,7 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->unique()->word();
+        $name = app(\Faker\Generator::class)->ecommerceCategory();
 
         return [
             'name' => $name,

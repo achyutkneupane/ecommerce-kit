@@ -20,12 +20,19 @@ class SkuFactory extends Factory
      */
     public function definition(): array
     {
+        $faker = app(\Faker\Generator::class);
+
         return [
             'product_id' => Product::factory(),
-            'code' => fake()->unique()->bothify('SKU-####-????'),
-            'price' => fake()->numberBetween(1000, 100000), // in cents
-            'quantity' => fake()->numberBetween(0, 100),
-            'specifications' => [],
+            'code' => $faker->unique()->bothify('SKU-####-????'),
+            'price' => $faker->randomFloat(2, 50, 2000), // $50 to $2000
+            'quantity' => $faker->numberBetween(5, 50),
+            'specifications' => function (array $attributes) use ($faker) {
+                $product = Product::find($attributes['product_id']);
+                $categoryName = $product?->category?->name ?? $faker->ecommerceCategory();
+
+                return $faker->ecommerceVariantProperties($categoryName);
+            },
         ];
     }
 }

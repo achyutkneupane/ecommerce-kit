@@ -23,7 +23,11 @@ class AppServiceProvider extends ServiceProvider
     #[Override]
     public function register(): void
     {
-        //
+        $this->app->extend(\Faker\Generator::class, function (\Faker\Generator $faker) {
+            $faker->addProvider(new \App\Faker\EcommerceProvider($faker));
+
+            return $faker;
+        });
     }
 
     /**

@@ -22,14 +22,16 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $title = fake()->unique()->sentence(3);
+        $faker = app(\Faker\Generator::class);
+        $categoryName = $faker->ecommerceCategory();
+        $title = $faker->ecommerceProductTitle($categoryName);
 
         return [
             'title' => $title,
             'slug' => Str::slug($title),
-            'category_id' => Category::factory(),
-            'brand_id' => Brand::factory(),
-            'specifications' => [],
+            'category_id' => Category::factory()->state(['name' => $categoryName]),
+            'brand_id' => Brand::factory()->state(['name' => $faker->ecommerceBrand($categoryName)]),
+            'specifications' => $faker->ecommerceSpecifications($categoryName),
             'sku_sequence' => 0,
         ];
     }
